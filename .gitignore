@@ -1,3 +1,11 @@
+# Docker
+*.tar
+.env
+docker-compose.override.yml
+build/
+tmp/
+.docker/machine/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
