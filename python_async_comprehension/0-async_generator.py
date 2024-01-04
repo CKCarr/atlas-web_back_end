@@ -11,9 +11,9 @@ Use the random module.
 """
 import asyncio
 import random
+from typing import Generator
 
-
-async def async_generator():
+async def async_generator() -> Generator[int, None, None]:
     """
     Function async_generator coroutine that will loop 10 times,
     each time asynchronously wait 1 second,
@@ -22,8 +22,8 @@ async def async_generator():
     :param None: None
     :return: 10 random numbers between 0 and 10 - may be float
     """
-    for i in range(10):
+    for _ in range(10):
         # wait asynchronously for 1 second
         await asyncio.sleep(1)
         # yield a random number between 0 and 10
-        yield i
+        yield random.uniform(0, 10)
