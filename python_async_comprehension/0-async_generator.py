@@ -11,10 +11,10 @@ Use the random module.
 """
 import asyncio
 import random
-from typing import AsyncGenerator
+from typing import Generator
 
 
-async def async_generator() -> AsyncGenerator[float, None]:
+async def async_generator() -> Generator[float, None, None]:
     """
     Function async_generator coroutine that will loop 10 times,
     each time asynchronously wait 1 second,
@@ -23,7 +23,7 @@ async def async_generator() -> AsyncGenerator[float, None]:
     :param None: None
     :return: 10 random numbers between 0 and 10 - may be float
     """
-    for _ in range(10):
+    for i in range(10):
         # wait asynchronously for 1 second
         await asyncio.sleep(1)
         # yield a random number between 0 and 10
