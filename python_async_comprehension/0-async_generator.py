@@ -26,4 +26,4 @@ async def async_generator():
         # wait asynchronously for 1 second
         await asyncio.sleep(1)
         # yield a random number between 0 and 10
-        yield i * random.random()
+        yield i
