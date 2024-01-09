@@ -68,9 +68,9 @@ class LIFOCache(BaseCaching):
             # if higher than max to discard last item in cache
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
                 # pop(-1) - removes last item from list(cache)
-                LIFO_discard = self.key_order_tracker.pop(-1)
-                del self.cache_data[LIFO_discard]
-                print('DISCARD:', LIFO_discard)
+                lifo_discard = self.key_order_tracker.pop(-1)
+                del self.cache_data[lifo_discard]
+                print('DISCARD:', lifo_discard)
     # end of put method
 
     def get(self, key):
