@@ -49,7 +49,7 @@ class LRUCache(BaseCaching):
 
     def put(self, key, item):
         """ Add key/value pairs to the cache system using LRU """
-        # if key and item are not None
+        # do this if key and item are not None
         if key is not None and item is not None:
             # do this if key is in cache
             if key in self.cache_data:
@@ -61,9 +61,9 @@ class LRUCache(BaseCaching):
                 discard = self.key_order_tracker.pop(0)
                 del self.cache_data[discard]
                 print("DISCARD: {}".format(discard))
-            # add key to tracker
+            # add key if not in the cache and cache not > max
             self.key_order_tracker.append(key)
-            # add key/value pair to cache
+            # assign the item value for the key key
             self.cache_data[key] = item
 # end of put method
 
