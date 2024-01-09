@@ -71,7 +71,7 @@ class FIFOCache(BaseCaching):
                 del self.cache_data[fifo_discard]
 
                 # print 'DISCARD:' followed by the key that was removed
-                print('DISCARD: {}', format(fifo_discard))
+                print('DISCARD: ', fifo_discard)
 # end of put method
 
     def get(self, key):
