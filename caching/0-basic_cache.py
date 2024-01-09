@@ -20,14 +20,17 @@ BaseCaching = __import__('base_caching').BaseCaching
 
 
 class BasicCache(BaseCaching):
-    """ BasicCache class that inherits from  BaseCaching and is a caching system.
+    """ BasicCache class that inherits from
+    BaseCaching and is a caching system.
 
     Args:
         BaseCaching (class): BaseCaching class to inherit from
 
     Functions: (methods defined here)
-        put: method that adds an item to the cache. If the key or the item is non the method does nothing.
-        get: method that gets an item from the cache by it's key. If the key is 'None' or doesn't exist in the cache, it returns 'None'.
+        put: method that adds an item to the cache.
+        If the key or the item is non the method does nothing.
+        get: method that gets an item from the cache by it's key.
+        If the key is 'None' or doesn't exist in the cache, it returns 'None'.
     """
 
     def put(self, key, item):
