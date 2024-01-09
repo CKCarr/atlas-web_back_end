@@ -26,7 +26,9 @@ def get(self, key):
     return None.
 """
 
-BaseCaching = __import__('base_caching').BaseCaching
+# BaseCaching = __import__('base_caching').BaseCaching
+
+from base_caching import BaseCaching
 
 
 class LIFOCache(BaseCaching):
@@ -52,25 +54,24 @@ class LIFOCache(BaseCaching):
             key (str): key to add to cache
             item (str): item to add to cache
         """
-        # check if key or item is not None
+        # if key and item are not None
         if key is not None and item is not None:
-            #  item is assigned to the key in the cache
-            self.cache_data[key] = item
-
-            # check key tracker to see if key is already in the cache
-            if key in self.key_order_tracker:
-                # remove key from key_order_tracker
+            # do this if key is in cache
+            if key in self.cache_data:
+                self.cache_data[key] = item
                 self.key_order_tracker.remove(key)
-                # add key to the end of the list
+            # do this if key is not in cache
+            else:
+                # if cache is at max capacity
+                if len(self.cache_data) >= self.MAX_ITEMS:
+                    # pop last element in key_order_tracker
+                    lifo_discard = self.key_order_tracker.pop()
+                    # delete last element in cache
+                    del self.cache_data[lifo_discard]
+                    print("DISCARD: {}".format(lifo_discard))
+                self.cache_data[key] = item
             self.key_order_tracker.append(key)
-
-            # check number of items in cache - pop(-1)
-            # if higher than max to discard last item in cache
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                # pop(-1) - removes last item from list(cache)
-                lifo_discard = self.key_order_tracker.pop(-1)
-                del self.cache_data[lifo_discard]
-                print('DISCARD:', lifo_discard)
+        # end of if key and item are not None
     # end of put method
 
     def get(self, key):
