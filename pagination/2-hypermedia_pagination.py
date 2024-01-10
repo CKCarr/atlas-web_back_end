@@ -21,7 +21,7 @@ an empty list should be returned.
 
 import csv
 import math
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
@@ -99,7 +99,7 @@ class Server:
         return dataset[start_index:min(end_index, len(dataset))]
 # end  get_page method
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
         """ get page of dataset with hypermedia pagination
 
         Args:
