@@ -40,6 +40,7 @@ def index_range(page: int, page_size: int) -> Tuple[int, int]:
     return (start_index, end_index)
 # end index_range method
 
+
 class Server:
     """Server class to paginate a database of popular baby names.
     """
@@ -152,3 +153,4 @@ class Server:
             "prev_page": page - 1 if page > 1 else None,
             "total_pages": total_pages
         }
+# end get_hyper method
