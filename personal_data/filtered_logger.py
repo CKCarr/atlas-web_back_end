@@ -3,10 +3,10 @@ import re
 from typing import List
 """
 filtered_logger Module
-----------------------
 
 This module provides functionality for filtering and obfuscating
-personal data from log messages. It includes the filter_datum function,
+personal data from log messages.
+It includes the filter_datum function,
 which can be used to replace specific fields in a log message with a
 redaction string, helping to ensure that sensitive information is not
 exposed in log outputs.
@@ -14,7 +14,8 @@ exposed in log outputs.
 Functions:
     filter_datum(fields: List[str],
     redaction: str, message: str, separator: str) -> str
-        Obfuscates specified fields in a log message.
+
+Obfuscates specified fields in a log message.
 """
 
 
