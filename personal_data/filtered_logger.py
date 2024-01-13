@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-import re
-from typing import List
-"""
-filtered_logger Module
+""" filtered_logger Module
 
 This module provides functionality for filtering and obfuscating
 personal data from log messages.
@@ -16,7 +13,17 @@ Functions:
     redaction: str, message: str, separator: str) -> str
 
 Obfuscates specified fields in a log message.
+
+
+class RedactingFormatter(logging.Formatter):
+        Redacting Formatter class
+        Inherits from logging.Formatter
+
 """
+
+import re
+from typing import List
+import logging
 
 
 def filter_datum(
@@ -24,7 +31,8 @@ def filter_datum(
         redaction: str,
         message: str,
         separator: str) -> str:
-    """ Returns the log message obfuscated.
+    """ function filter_datum
+    Obfuscates specified fields in a log message.
 
     Args:
         fields: A list of strings representing all fields to obfuscate.
@@ -40,3 +48,48 @@ def filter_datum(
         message = re.sub(
             f"{field}=[^{separator}]+", f"{field}={redaction}", message)
     return message
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+
+    Inherits from logging.Formatter
+
+    creates variables for class RedactingFormatter
+    REDACTION: A string representing by what the field will be obfuscated.
+    FORMAT: A string representing the format of the log message.
+    SEPARATOR: A string representing by which character fields
+    in the log line are separated.
+
+    functions:
+        format(record: logging.LogRecord) -> str
+    """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]):
+        """ function __init__
+        Constructor method for RedactingFormatter class
+
+        Args:
+            self: The object itself.
+            fields (List[str]):  A list of strings representing all fields
+        """
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """ Function format
+        Filters values in incoming log records using filter_datum.
+        Args:
+            record: A logging.LogRecord object.
+        Returns:
+            The obfuscated log message.
+        """
+        return filter_datum(
+            fields=self.fields,
+            redaction=self.REDACTION,
+            message=super().format(record),
+            separator=self.SEPARATOR)
