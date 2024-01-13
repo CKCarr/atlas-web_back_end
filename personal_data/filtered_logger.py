@@ -33,7 +33,17 @@ def filter_datum(
         redaction: str,
         message: str,
         separator: str) -> str:
-    """ returns the lob message obfuscated """
+    """ Returns the log message obfuscated.
+
+    Args:
+        fields: A list of strings representing all fields to obfuscate.
+        redaction: A string representing by what the field will be obfuscated.
+        message: A string representing the log line.
+        separator: A string representing by which character fields in the log line are separated.
+
+    Returns:
+        The obfuscated log message.
+    """
     for field in fields:
         message = re.sub(
             f"{field}=[^{separator}]+", f"{field}={redaction}", message)
