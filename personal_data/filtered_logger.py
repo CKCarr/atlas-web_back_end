@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import re
+from typing import List
 """
 Write a function called filter_datum
 that returns the log message obfuscated:
@@ -27,7 +28,7 @@ filter_datum should be less than 5 lines long
 """
 
 
-def filter_datum(fields: str, redaction : str, message : str, separator: str ) -> str:
+def filter_datum(fields: List[str], redaction : str, message : str, separator: str ) -> str:
     """ returns the lob message obfuscated """
     for field in fields:
         message = re.sub(f"{field}=[^{separator}]+", f"{field}={redaction}", message)
