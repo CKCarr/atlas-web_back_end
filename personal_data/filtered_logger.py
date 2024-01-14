@@ -29,7 +29,6 @@ import mysql.connector
 from mysql.connector import connection
 
 
-
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
