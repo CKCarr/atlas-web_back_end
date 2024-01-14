@@ -56,6 +56,7 @@ def hash_password(password: str) -> bytes:
     # return the hashed password
     return hashed_password
 
+
 def is_valid(hashed_password: bytes, password: str) -> bool:
     """ function is_valid
     Validates that the provided password matches the hashed password.
@@ -69,7 +70,7 @@ def is_valid(hashed_password: bytes, password: str) -> bool:
     """
     # convert the password string to bytes
     password_bytes = password.encode('utf-8')
-    
+
     #  check if provided password
     # matches the hashed password
     return bcrypt.checkpw(password_bytes, hashed_password)
