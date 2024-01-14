@@ -24,6 +24,11 @@ class RedactingFormatter(logging.Formatter):
 import re
 from typing import List
 import logging
+import os
+import mysql.connector
+from mysql.connector import connection
+
+
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -117,3 +122,29 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """ function get_db
+
+    Returns a connector to the database.
+
+    Returns:
+        mysql.connector.connection.MySQLConnection: _description_
+    """
+    db_user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    db_password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    db_host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+
+    try:
+        return mysql.connector.connect(
+            user=db_user,
+            password=db_password,
+            host=db_host,
+            database=db_name
+        )
+    except mysql.connector.Error as err:
+        # if connection fails, log the error and exit
+        logging.error(f"DB connection error: {err}")
+        raise
