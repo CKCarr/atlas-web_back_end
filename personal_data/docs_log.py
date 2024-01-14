@@ -22,3 +22,5 @@ python3 -c 'print(__import__("filtered_logger").main.__doc__)'
 python3 -c 'print(__import__("encrypt_password").__doc__)'
 # function hash_password
 python3 -c 'print(__import__("encrypt_password").hash_password.__doc__)'
+# function is_valid
+python3 -c 'print(__import__("encrypt_password").is_valid.__doc__)'

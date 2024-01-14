@@ -16,6 +16,11 @@ PII_FIELDS = __import__('filtered_logger').PII_FIELDS
 # import for task 3
 get_db = __import__('filtered_logger').get_db
 
+hash_password = __import__('encrypt_password').hash_password
+
+hash_password = __import__('encrypt_password').hash_password
+is_valid = __import__('encrypt_password').is_valid
+
 
 print('main task 0')
 fields = ["password", "date_of_birth"]
@@ -35,10 +40,23 @@ print(get_logger.__annotations__.get('return'))
 print("PII_FIELDS: {}".format(len(PII_FIELDS)))
 
 print('\nmain task 3')
-db = get_db()
-cursor = db.cursor()
-cursor.execute("SELECT COUNT(*) FROM users;")
-for row in cursor:
-    print(row[0])
-cursor.close()
-db.close()
+# db = get_db()
+# cursor = db.cursor()
+# cursor.execute("SELECT COUNT(*) FROM users;")
+# for row in cursor:
+#     print(row[0])
+# cursor.close()
+# db.close()
+
+# main task 5
+print('\nmain task 5')
+password = "MyAmazingPassw0rd"
+print(hash_password(password))
+print(hash_password(password))
+
+# main task 6
+print('\nmain task 6')
+password = "MyAmazingPassw0rd"
+encrypted_password = hash_password(password)
+print(encrypted_password)
+print(is_valid(encrypted_password, password))
