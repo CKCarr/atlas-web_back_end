@@ -1,2 +1,4 @@
 pycodestyle==2.5
 mypy==1.8.0
+bcrypt
+mysql-connector-python

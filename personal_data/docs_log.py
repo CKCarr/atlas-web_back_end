@@ -12,3 +12,5 @@ python3 -c 'print(__import__("filtered_logger").filter_datum.__doc__)'
 python3 -c 'print(__import__("filtered_logger").get_logger.__doc__)'
 # function doc get_db
 python3 -c 'print(__import__("filtered_logger").get_db.__doc__)'
+# function doc main
+python3 -c 'print(__import__("filtered_logger").main.__doc__)'
