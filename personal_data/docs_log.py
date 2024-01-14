@@ -14,3 +14,11 @@ python3 -c 'print(__import__("filtered_logger").get_logger.__doc__)'
 python3 -c 'print(__import__("filtered_logger").get_db.__doc__)'
 # function doc main
 python3 -c 'print(__import__("filtered_logger").main.__doc__)'
+
+
+
+
+# module doc encrypt_password
+python3 -c 'print(__import__("encrypt_password").__doc__)'
+# function hash_password
+python3 -c 'print(__import__("encrypt_password").hash_password.__doc__)'
