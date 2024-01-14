@@ -145,5 +145,51 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         )
     except mysql.connector.Error as err:
         # if connection fails, log the error and exit
-        logging.error(f"DB connection error: {err}")
+        logging.error("DB connection error: %s", err)
         raise
+
+
+def main() -> None:
+    """ function main
+
+    obtain a database connection using get_db.
+    retrieve all rows in the users table.
+    display each row under a filtered format.
+
+    name, email, phone, ssn, password, ip, last_login, user_agent
+
+    """
+    # obtain a database connection using get_db.
+    db_conn = get_db()
+    cursor = db_conn.cursor()
+
+    # retrieve all rows in the users table. define the query
+    query = "SELECT * FROM users;"
+    # execute the query
+    cursor.execute(query)
+
+    # fetch all rows
+    rows = cursor.fetchall()
+
+    # set up logger with necessary formatting
+    logger = get_logger()
+
+    # display each row under a filtered format.
+    # iterate over each row and log the data in filtered format
+    for row in rows:
+        # name, email, phone, ssn, password, ip, last_login, user_agent
+        log_message = (
+            f"name={row[0]}; email={row[1]}; phone={row[2]}; "
+            f"ssn={row[3]}; password={row[4]}; ip={row[5]}; "
+            f"last_login={row[6]}; user_agent={row[7]}"
+            )
+
+        # log the data in filtered format
+        logger.info(log_message)
+
+    cursor.close()
+    db_conn.close()
+
+
+if __name__ == "__main__":
+    main()
