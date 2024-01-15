@@ -25,6 +25,7 @@ class Auth():
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ require_auth public method
+        determines if the path requires authentication
 
         Args:
             path (str): will be used later,
@@ -35,7 +36,24 @@ class Auth():
                 False - path is not required to be authenticated
                 True - path is required to be authenticated
         """
-        return False
+        # check if path is none and excluded_paths are None or empty
+        if path is None:
+            return True
+        # check if path contains excluded_paths
+        if not excluded_paths:
+            return True
+        # Ensure the path is slash tolerant
+        # remove trailing slash from path
+        path = path.strip('/')
+
+        # check the path in excluded_paths
+        for ex_paths in excluded_paths:
+            # remove trailing slash from paths
+            ex_paths = ex_paths.strip('/')
+            # check if path is in excluded_paths
+            if path == ex_paths or path.startswith(ex_paths + '/'):
+                return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ authorization header public method
@@ -54,9 +72,6 @@ class Auth():
             Args:
                 request (object): flask request object
             Returns:
-                None - request is none
-                None - request doesn't contain user credentials
-                None - failed to retrieve user instance for request.user_id
-                user instance - current user
+
         """
         return None
