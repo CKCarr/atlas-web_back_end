@@ -19,8 +19,11 @@ auth = None
 # Get AUTH_TYPE from environment
 AUTH_TYPE = os.getenv('AUTH_TYPE')
 
-# Conditionally create an Auth instance based on AUTH_TYPE
-if AUTH_TYPE:
+# Conditionally create a BasicAuth instance based on AUTH_TYPE
+if AUTH_TYPE == 'basic_auth':
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
+elif AUTH_TYPE:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
