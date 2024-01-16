@@ -79,6 +79,5 @@ class Auth():
             Args:
                 request (object): flask request object
             Returns:
-
         """
         return None
