@@ -6,6 +6,8 @@
 """
 from .auth import Auth
 import base64
+from models.user import User
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -80,3 +82,37 @@ class BasicAuth(Auth):
         # split decoded_base64_authorization_header by ':'
         # and return tuple of email and password
         return tuple(decoded_base64_authorization_header.split(':', 1))
+
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str
+            ) -> TypeVar('User'):
+        """ user_object_from_credentials method
+        Args:
+            user_email: string containing the user email
+            user_pwd: string containing the user password
+        Returns:
+            the User instance based on his email and password.
+        """
+        if user_email is None or not isinstance(user_email, str):
+            return None
+
+        if user_pwd is None or not isinstance(user_pwd, str):
+            return None
+
+        # use User class search method to find user by email
+        users = User.search({'email': user_email})
+        if not users or len(users) == 0:
+            return None
+        # check if password matches the password stored
+        # in the first user instance found
+        user = users[0]
+
+        # check if password matches the password stored
+        if not user.is_valid_password(user_pwd):
+            # if password does not match, return None
+            return None
+        # if password matches, return user instance
+        # return user instance
+        return user
