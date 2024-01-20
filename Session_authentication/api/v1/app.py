@@ -9,7 +9,6 @@ from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 
 
-
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
@@ -62,8 +61,6 @@ def before_request_func() -> None:
     """
     if auth is None:
         return
-    if auth:
-        request.current_user = auth.current_user(request)
 
     # paths to exclude from authentication
     excluded_paths = ['/api/v1/status/',
@@ -78,12 +75,16 @@ def before_request_func() -> None:
         abort(401)
 
     # check if request is not authenticated
+    current_user = auth.current_user(request)
     if auth.current_user(request) is None:
         abort(403)
-
+    else:
+        # set current user on for request
+        request.current_user = current_user
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     app.run(host=host, port=port)
     app.run(debug=True)
+
