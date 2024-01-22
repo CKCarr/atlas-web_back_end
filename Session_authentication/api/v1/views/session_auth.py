@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ Session authentication view module
 
     This module handles all routes for the Session authentication.
