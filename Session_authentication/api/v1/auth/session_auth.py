@@ -9,4 +9,9 @@
 from .auth import Auth
 
 class SessionAuth(Auth):
+    """ SessionAuth class
+
+    Args:
+        Auth (class) : Inherits from Auth
+    """
     pass
