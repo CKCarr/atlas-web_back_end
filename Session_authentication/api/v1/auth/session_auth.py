@@ -9,6 +9,7 @@
 from .auth import Auth
 import uuid
 
+
 class SessionAuth(Auth):
     """ SessionAuth class
 
