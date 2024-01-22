@@ -25,27 +25,18 @@ def view_one_user(user_id: str = None) -> str:
       - User object JSON represented
       - 404 if the User ID doesn't exist
     """
-    try:
-        # Check for the 'me' special case first
-        if user_id == "me":
-            if not request.current_user:
-                abort(404)
-            return jsonify(request.current_user.to_dict()), 200
-
-        # For other user_ids, proceed as before
-        if user_id is None:
+    if user_id == "me":
+        if request.current_user is None:
             abort(404)
+        return jsonify(request.current_user.to_json()), 200
 
-        user = User.get(user_id)
-        if user is None:
-            abort(404)
+    if user_id is None:
+        abort(404)
 
-        return jsonify(user.to_json()), 200
-    except Exception as e:
-        # Log the exception for debugging purposes
-        print(f"An error occurred in view_one_user: {e}")
-        # Optionally, you can return a custom message or a generic 500 error
-        abort(500)
+    user = User.get(user_id)
+    if user is None:
+        abort(404)
+    return jsonify(user.to_json()), 200
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
