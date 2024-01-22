@@ -8,6 +8,7 @@
             authorization_header
             current_user
 """
+import os
 from flask import request
 from typing import List, TypeVar
 
@@ -81,3 +82,22 @@ class Auth():
             Returns:
         """
         return None
+
+    def session_cookie(self, request=None):
+        """ session_cookie public method
+        Args:
+            request (object): flask request object
+        Returns:
+            None - request is None or cookie named SESSION_NAME
+        """
+        if request is None:
+            return None
+
+        # use the environment variable SESSION_NAME
+        # to define the name of the cookie
+        session_name = os.getenv('SESSION_NAME')
+        if not session_name:
+            return None
+
+        # return the value of the cookie request named session_name
+        return request.cookies.get(session_name)
