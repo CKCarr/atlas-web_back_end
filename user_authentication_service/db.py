@@ -60,4 +60,8 @@ class DB:
         # Return None if the input arguments do not match the users table
         user = session.query(User).filter_by(**kwargs).first()
 
+        if not user:
+            # If no user is found, raise NoResultFound
+            raise NoResultFound("No user found with the provided attributes.")
+
         return user
