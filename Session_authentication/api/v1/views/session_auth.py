@@ -53,3 +53,19 @@ def session_login():
     response = jsonify(user.to_json())
     response.set_cookie(session_name, session_id, httponly=True, secure=True)
     return response
+
+
+@app_views.route('/auth_session/logout/', methods=['DELETE'],
+                 strict_slashes=False)
+def logout():
+    """
+        Logout route for Session authentication
+            DELETE /api/v1/auth_session/logout
+    """
+    # import auth instance here to avoid circular import
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+
+    # return empty JSON with status code 200
+    return jsonify({}), 200
