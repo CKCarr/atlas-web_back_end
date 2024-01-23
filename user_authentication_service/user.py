@@ -13,7 +13,7 @@
             reset_token (str), a nullable string
 """
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String
 
 Base = declarative_base()
 
@@ -29,7 +29,12 @@ class User(Base):
     reset_token = Column(String(250), nullable=True)
 
     def __init__(self, *args, **kwargs):
-        """ Initialize user """
+        """ Initialize user Instance
+
+        Args:
+            args ([type]): not used
+            kwargs ([type]): multiple key/value arguments to send
+        """
         super().__init__(*args, **kwargs)
         self.email = kwargs.get('email', None)
         self.hashed_password = kwargs.get('hashed_password', None)
