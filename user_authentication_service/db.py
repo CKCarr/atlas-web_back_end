@@ -12,7 +12,7 @@ from user import Base, User
 
 # Set SQLAlchemy log level: only show error messages and above
 logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
+logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
 
 
 class DB:
@@ -63,11 +63,13 @@ class DB:
             user = session.query(User).filter_by(**kwargs).first()
 
             if user is None:
-                # If no user is found, raise NoResultFound
-                raise NoResultFound("No user found with the provided attributes.")
+                # Instead of raising NoResultFound, you might just return None
+                # or handle it in a way that makes sense for your application
+                return None
 
             return user
 
         except InvalidRequestError as e:
-            # Handle case where the query is invalid (e.g., wrong attribute names)
-            raise InvalidRequestError(f"Invalid query parameters: {str(e)}")
+            # Handle case where the query is invalid (wrong attribute names)
+            raise InvalidRequestError(
+                f"Invalid query parameters: {str(e)}") from e
