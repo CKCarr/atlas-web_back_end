@@ -9,12 +9,25 @@ The returned bytes is a salted hash of the input password,
 hashed with bcrypt.hashpw.
 """
 from db import DB
+from user import User
+from sqlalchemy.orm.exc import NoResultFound
 
 
 def _hash_password(password: str) -> bytes:
-    """ Returns salted hash of input password """
+    """
+    Hash a password for storing.
+
+    :param password: The password to hash.
+    :return: A salted hash of the input password.
+    """
     import bcrypt
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    # Generate a salt
+    salt = bcrypt.gensalt()
+
+    # Hash the password with the salt
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+
+    return hashed_password
 
 
 class Auth:
@@ -35,3 +48,15 @@ class Auth:
             if bcrypt.checkpw(password.encode(), users[0]['hashed_password']):
                 return True
         return False
+
+    def register_user(self, email: str, password: str) -> User:
+        """ Registers user """
+        try:
+            users = self._db.find_user_by(email=email)
+
+            if users:
+                raise ValueError('User {} already exists'.format(email))
+
+        except NoResultFound:
+            hashed_password = _hash_password(password)
+            return self._db.add_user(email, hashed_password)
