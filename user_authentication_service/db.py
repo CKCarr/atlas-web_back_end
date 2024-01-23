@@ -56,20 +56,8 @@ class DB:
         """ Takes in arbitrary keyword arguments and returns the first row
         found in the users table as filtered by the method’s input arguments.
         """
-        session = self._session  # Use the session from your DB class
+        session = self._session
+        # Return None if the input arguments do not match the users table
+        user = session.query(User).filter_by(**kwargs).first()
 
-        try:
-            # Query the user table with the provided keyword arguments
-            user = session.query(User).filter_by(**kwargs).first()
-
-            if user is None:
-                # Instead of raising NoResultFound, you might just return None
-                # or handle it in a way that makes sense for your application
-                return None
-
-            return user
-
-        except InvalidRequestError as e:
-            # Handle case where the query is invalid (wrong attribute names)
-            raise InvalidRequestError(
-                f"Invalid query parameters: {str(e)}") from e
+        return user
