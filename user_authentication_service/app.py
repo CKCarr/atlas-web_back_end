@@ -1,4 +1,4 @@
-#!.usr/bin/env python3
+#!/usr/bin/env python3
 """ 6. Basic Flask app
 In this task, you will set up a basic Flask app.
 
