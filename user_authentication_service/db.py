@@ -6,11 +6,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 from user import Base, User
 
 # Set SQLAlchemy log level: only show error messages and above
 logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').propagate = False
+logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
 
 
 class DB:
@@ -49,3 +51,23 @@ class DB:
         session.commit()
         #  Return newly created user object
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """ Takes in arbitrary keyword arguments and returns the first row
+        found in the users table as filtered by the method’s input arguments.
+        """
+        session = self._session  # Use the session from your DB class
+
+        try:
+            # Query the user table with the provided keyword arguments
+            user = session.query(User).filter_by(**kwargs).first()
+
+            if user is None:
+                # If no user is found, raise NoResultFound
+                raise NoResultFound("No user found with the provided attributes.")
+
+            return user
+
+        except InvalidRequestError as e:
+            # Handle case where the query is invalid (e.g., wrong attribute names)
+            raise InvalidRequestError(f"Invalid query parameters: {str(e)}")
