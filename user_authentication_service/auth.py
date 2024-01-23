@@ -40,15 +40,6 @@ class Auth:
         """
         self._db = DB()
 
-    def valid_login(self, email: str, password: str) -> bool:
-        """ Checks if login is valid """
-        import bcrypt
-        users = self._db.find_user_by(email=email)
-        if users:
-            if bcrypt.checkpw(password.encode(), users[0]['hashed_password']):
-                return True
-        return False
-
     def register_user(self, email: str, password: str) -> User:
         """ Registers user """
         try:
@@ -60,3 +51,14 @@ class Auth:
         except NoResultFound:
             hashed_password = _hash_password(password)
             return self._db.add_user(email, hashed_password)
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """ Checks if login is valid """
+        try:
+            users = self._db.find_user_by(email=email)
+
+            if users:
+                return True
+
+        except NoResultFound:
+            return False
