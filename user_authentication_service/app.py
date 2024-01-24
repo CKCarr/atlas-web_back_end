@@ -75,7 +75,7 @@ def logout():
     if session_id is valid, destroy session
     return redirect to GET /
     """
-    session_id = request.cookies.get('session_id')
+    session_id = request.cookies.get('session_id', None)
     user = AUTH.get_user_from_session_id(session_id)
 
     if user:
