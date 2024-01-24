@@ -81,15 +81,13 @@ def logout():
     # find user with requested session_id
     user = AUTH.get_user_from_session_id(session_id)
 
-    # handle invalid session_id
-    if session_id is None or user is None:
+    # validate user exists and destroy session
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
+    else:
+        # forbidden
         abort(403)
-
-    # destroy session
-    AUTH.destroy_session(user.id)
-
-    # return redirect to GET /
-    return redirect('/')
 
 
 if __name__ == "__main__":
