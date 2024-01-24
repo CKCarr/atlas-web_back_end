@@ -15,7 +15,7 @@ import bcrypt
 import uuid
 
 
-def _hash_password(password: str) -> bytes:
+def _hash_password(self, password: str) -> bytes:
     """
     Hash a password for storing.
 
@@ -31,7 +31,7 @@ def _hash_password(password: str) -> bytes:
     return hashed_password
 
 
-def _generate_uuid(self) -> str:
+def _generate_uuid() -> str:
     """ Generate a UUID """
 
     new_uuid = uuid.uuid4()
