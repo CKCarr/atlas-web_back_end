@@ -5,8 +5,8 @@ In this task, you will set up a basic Flask app.
 Create a Flask app that has a single GET route ("/") and use flask.
 jsonify to return a JSON payload of the form:
 """
-from flask import Flask, jsonify, request, abort, \
-        current_app, make_response, redirect, url_for
+from flask import Flask, jsonify, request, abort
+from flask import current_app, make_response, redirect, url_for
 from auth import Auth
 
 
