@@ -64,14 +64,27 @@ class Auth:
 
         # Try to find the user by email
         user = self._db.find_user_by(email=email)
+
+        if user is None:
+            return False
+
         if user:
             # Ensure the hashed_password is in bytes format if it's not
             hashed_password = user.hashed_password
             if isinstance(hashed_password, str):
                 hashed_password = hashed_password.encode()
+            
 
             # Check if the provided password matches the stored hashed password
             if bcrypt.checkpw(password.encode(), hashed_password):
                 return True
 
         return False
+
+    # private method
+    def _generate_uuid(self) -> str:
+        """ Generate a UUID """
+        from uuid import uuid4
+
+        new_uuid = uuid4()
+        return str(new_uuid)
