@@ -77,6 +77,8 @@ def logout():
     """
     # parse session_id from request
     session_id = request.cookies.get('session_id')
+    if session_id is None:
+        abort(403)
 
     # find user with requested session_id
     user = AUTH.get_user_from_session_id(session_id)
