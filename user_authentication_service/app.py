@@ -82,7 +82,7 @@ def logout():
         abort(403)
 
     AUTH.destroy_session(user.id)
-    response = redirect(url_for('welcome'))
+    response = redirect(url_for('welcome'), 302)
     return response
 
 
