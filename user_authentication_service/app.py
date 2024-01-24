@@ -6,7 +6,7 @@ Create a Flask app that has a single GET route ("/") and use flask.
 jsonify to return a JSON payload of the form:
 """
 from flask import Flask, jsonify, request, abort, \
-        current_app, make_response, redirect
+        current_app, make_response, redirect, url_for
 from auth import Auth
 
 
@@ -18,8 +18,8 @@ app.auth = AUTH
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def hello_world():
-    """ Hello world """
+def welcome():
+    """ home page """
     return jsonify({"message": "Bienvenue"})
 
 
@@ -75,22 +75,15 @@ def logout():
     if session_id is valid, destroy session
     return redirect to GET /
     """
-    # parse session_id from request
     session_id = request.cookies.get('session_id')
-    if session_id is None:
-        abort(403)
-
-    # find user with requested session_id
     user = AUTH.get_user_from_session_id(session_id)
 
-    # validate user exists and destroy session
     if user:
         AUTH.destroy_session(user.id)
         response = redirect('/')
-        response.set_cookie('session_id', '', expires=0)
+        response.set_cookie('session_id', '', expires=0)  # Remove the cookie
         return response
     else:
-        # forbidden
         abort(403)
 
 
