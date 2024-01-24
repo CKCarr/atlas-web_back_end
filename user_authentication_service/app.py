@@ -78,11 +78,13 @@ def logout():
     session_id = request.cookies.get('session_id', None)
     user = AUTH.get_user_from_session_id(session_id)
 
-    if user is None:
+    if not session_id or not user:
         abort(403)
 
     AUTH.destroy_session(user.id)
-    return redirect(url_for('welcome'))
+    response = redirect(url_for('welcome'))
+    response.set_cookie('session_id', '', expires=0)  # Remove the cookie
+    return response
 
 
 if __name__ == "__main__":
