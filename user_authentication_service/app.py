@@ -94,6 +94,10 @@ def profile():
     if session_id is valid, return jsonify of user
     """
     session_id = request.cookies.get('session_id', None)
+
+    if session_id is None:
+        abort(403)
+
     user = AUTH.get_user_from_session_id(session_id)
 
     if user is None:
@@ -132,7 +136,6 @@ def update_password():
         return jsonify({"email": email, "message": "Password updated"}), 200
     except ValueError:
         abort(403)
-
 
 
 if __name__ == "__main__":
