@@ -35,7 +35,7 @@ def users():
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'], strict_slashes=False)
+@app.route('/sessions', methods=['POST'])
 def login():
     """ login function
     send response to post request
@@ -66,7 +66,7 @@ def login():
     return response
 
 
-@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['DELETE'])
 def logout():
     """ logout function
     find user with requested session_id
@@ -82,10 +82,11 @@ def logout():
         abort(403)
 
     AUTH.destroy_session(user.id)
-    return redirect(url_for('welcome'), 302)
+    
+    return redirect('/')
 
 
-@app.route('/profile', methods=['GET'], strict_slashes=False)
+@app.route('/profile', methods=['GET'])
 def profile():
     """ profile function
     if session_id is None, return 403
@@ -121,7 +122,7 @@ def get_reset_password_token():
         abort(403)
 
 
-@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+@app.route('/reset_password', methods=['PUT'])
 def update_password():
     """ update password function
     if email not registered, return 403
