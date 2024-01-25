@@ -82,8 +82,7 @@ def logout():
         abort(403)
 
     AUTH.destroy_session(user.id)
-    response = redirect(url_for('welcome'), 302)
-    return response
+    return redirect(url_for('welcome'))
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
@@ -93,7 +92,7 @@ def profile():
     if user is None, return 403
     if session_id is valid, return jsonify of user
     """
-    session_id = request.cookies.get('session_id', None)
+    session_id = request.cookies.get('session_id')
 
     if session_id is None:
         abort(403)
@@ -114,6 +113,7 @@ def get_reset_password_token():
     return jsonify of reset_token
     """
     email = request.form.get('email')
+
     try:
         reset_token = AUTH.get_reset_password_token(email)
         return jsonify({"email": email, "reset_token": reset_token}), 200
