@@ -8,7 +8,6 @@ from unittest.mock import patch, Mock
 from utils import access_nested_map, get_json, memoize
 
 
-
 class TestAccessNestedMap(unittest.TestCase):
     """ TestAccessNestedMap class
 
@@ -67,6 +66,62 @@ class TestGetJson(unittest.TestCase):
             self.assertEqual(result, test_payload)
             # assert that the mock was called once with the test_url
             mock_get.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """  TestMemoize class for utils.py
+    Args:
+        unittest (unittest.TestCase): Unit testing for utils.py
+    """
+
+    def test_memoize(self):
+        """ Test memoize method for utils.py
+        check if the method returns the result as expected
+        """
+        # create a mock class
+        class TestClass:
+            """ TestClass class
+            Args:
+                unittest (unittest.TestCase): Unit testing for utils.py
+                memoize method
+            """
+            def __init__(self):
+                """ __init__ method
+                Args:
+                    self (TestClass): the class itself
+                """
+                self.call_count = 0
+
+            def a_method(self):
+                """ a_method method
+                Args:
+                    self (TestClass): the class itself
+                """
+                self.call_count += 1
+                return 42
+
+            @memoize
+            def a_property(self):
+                """ a_property method
+                Args:
+                    self (TestClass): the class itself
+                """
+                return self.a_method()
+
+        # create a mock object from the mock class
+        with patch.object(
+                TestClass, 'a_method', return_value=42) as mocked_method:
+            test_instance = TestClass()
+            # call the a_property method twice
+            result1 = test_instance.a_property
+            result2 = test_instance.a_property
+
+            # Check if the return values are as expected
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # Check if the a_method method was called only once
+            mocked_method.assert_called_once()
 
 
 if __name__ == '__main__':
