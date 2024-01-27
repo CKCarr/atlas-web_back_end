@@ -28,16 +28,16 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-@parameterized.expand([
-    ({}, ('a',)),
-    ({'a': 1}, ('a', 'b'))
-])
-def test_access_nested_map_exception(self, nested_map, path):
-    """ Test access_method_nested_map method for utils.py
-    check if the method raises the correct exception
-    """
-    with self.assertRaises(KeyError):
-        access_nested_map(nested_map, path)
+    @parameterized.expand([
+        ({}, ('a',)),
+        ({'a': 1}, ('a', 'b'))
+    ])
+    def test_access_nested_map_exception(self, nested_map, path):
+        """ Test access_method_nested_map method for utils.py
+        check if the method raises the correct exception
+        """
+        with self.assertRaises(KeyError):
+            access_nested_map(nested_map, path)
 
 
 if __name__ == '__main__':
