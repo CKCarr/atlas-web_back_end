@@ -9,7 +9,7 @@ from client import GithubOrgClient
 import client
 
 
-class TestGithubClient(unittest.TestCase):
+class TestGithubOrgClient(unittest.TestCase):
     """ Test for the GithubOrgClient class.
         Args:
             unittest (unittest.TestCase): unittest
