@@ -112,14 +112,22 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             Args:
                 unittest (unittest.TestCase): unittest
         """
-        # Patch the GithubOrgClient._public_repos_url
-        cls.get_patcher = patch('client.GithubOrgClient._public_repos_url',
-                                new_callable=PropertyMock,
-                                return_value=" \
-                                    https://api.github.com/orgs/google/repos")
+        # Start the patcher for requests.get
+        cls.get_patcher = patch('requests.get')
+        cls.mock_get = cls.get_patcher.start()
 
-        # Start the patch
-        cls.mock_public_repos_url = cls.get_patcher.start()
+        # Define the side_effect function for your mock
+        def side_effect(url):
+            if url == f"https://api.github.com/orgs/ \
+                    {cls.org_payload['login']}":
+                return Mock(json=lambda: cls.org_payload)
+            elif url == f"https://api.github.com/orgs/ \
+                    {cls.org_payload['login']}/repos":
+                return Mock(json=lambda: cls.repos_payload)
+            # ... handle other URLs if necessary ...
+            return Mock(status_code=404)
+
+        cls.mock_get.side_effect = side_effect
 
     @classmethod
     def tearDownClass(cls):
