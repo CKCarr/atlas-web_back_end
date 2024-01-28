@@ -10,10 +10,11 @@ msgstr "Welcome to Holberton"
 msgid "home_header"
 msgstr "Hello world!"
 
+
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-28 01:12-0600\n"
-"PO-Revision-Date: 2024-01-28 01:12-0600\n"
+"POT-Creation-Date: 2024-01-28 01:30-0600\n"
+"PO-Revision-Date: 2024-01-28 01:30-0600\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
