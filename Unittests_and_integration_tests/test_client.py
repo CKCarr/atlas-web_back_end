@@ -3,9 +3,11 @@
 Test for the GithubOrgClient class.
 """
 import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
+import fixtures
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+from parameterized import parameterized, parameterized_class
+from unittest.mock import patch, PropertyMock, Mock
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -94,6 +96,67 @@ class TestGithubOrgClient(unittest.TestCase):
 
         # Check that the return value is expected
         self.assertEqual(has_license, expected)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    fixtures.TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ Test for the GithubOrgClient class.
+        Args:
+            unittest (unittest.TestCase): unittest
+    """
+    @classmethod
+    def setUpClass(cls):
+        """ Test for the GithubOrgClient class.
+            Args:
+                unittest (unittest.TestCase): unittest
+        """
+        # Patch the GithubOrgClient._public_repos_url
+        cls.get_patcher = patch('client.GithubOrgClient._public_repos_url',
+                                new_callable=PropertyMock,
+                                return_value=" \
+                                    https://api.github.com/orgs/google/repos")
+
+        # Start the patch
+        cls.mock_public_repos_url = cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        """ Test for the GithubOrgClient class.
+            Args:
+                unittest (unittest.TestCase): unittest
+        """
+        # End the patch
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """ Test that GithubOrgClient.public_repos returns the correct list of
+            repos.
+            Args:
+                unittest (unittest.TestCase): unittest
+        """
+        # Instantiate GithubOrgClient
+        github_org_client = GithubOrgClient("google")
+
+        # Patch the return value of get_json to be the expected payload
+        self.get_patcher = patch('client.get_json',
+                                 return_value=self.repos_payload)
+
+        # Start the patch
+        self.mock_get_json = self.get_patcher.start()
+
+        # Call the public_repos method
+        repos = github_org_client.public_repos()
+
+        # Check that the return value is the expected one
+        self.assertEqual(repos, self.expected_repos)
+
+        # Check that the mocked method was called once
+        self.mock_get_json.assert_called_once()
+
+        # End the patch
+        self.get_patcher.stop()
 
 
 if __name__ == '__main__':
