@@ -3,8 +3,9 @@
     with a single '/' route and an index.html template
 """
 from flask import Flask, render_template, request
-from flask_babel import Babel, _
 
+from flask_babel import Babel, _
+""" Import Babel's gettext function as '_' for string translations """
 
 class Config:
     """ Configure available languages in our app """
