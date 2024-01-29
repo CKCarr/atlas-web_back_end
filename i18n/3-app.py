@@ -24,11 +24,11 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-@app.before_request
-def before_request():
-    """ Set/get current language from request
-        and set it to g.locale for Jinja templates to use """
-    g.locale = str(get_locale())
+# @app.before_request
+# def before_request():
+#     """ Set/get current language from request
+#         and set it to g.locale for Jinja templates to use """
+#     g.locale = str(get_locale())
 
 
 @babel.localeselector
