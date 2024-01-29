@@ -17,35 +17,23 @@ class Config:
 app = Flask(__name__)
 # Use Config class as config for our app
 app.config.from_object(Config)
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+
 
 # Instantiate Babel object in module-level variable babel
 babel = Babel(app)
 
 
+# @babel.localeselector
 def get_locale():
-    """ Return user preferred locale, if not available return best match """
+    """ Return user preferred locale,
+    if not available return best match
+    """
     url_locale = request.args.get('locale')
-    if url_locale in app.config['LANGUAGES']:
-        print(f"URL Locale: {url_locale}")  # Debug print
+    if url_locale and url_locale in app.config['LANGUAGES']:
         return url_locale
-    best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
-    print(f"Best Match Locale: {best_match}")  # Debug print
+    best_match = request.accept_languages.best_match(
+        app.config['LANGUAGES'])
     return best_match
-
-
-@app.before_request
-def before_request():
-    """ Set global variable g.locale to current request locale """
-    g.locale = get_locale()
-    print(f"Current Locale: {g.locale}")  # Debug print
-    refresh()
-
-
-# def get_locale():
-#     return 'fr'  # Force French for testing
-
 
 
 @app.route('/')
@@ -56,4 +44,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    babel.init_app(app, locale_selector=get_locale)
