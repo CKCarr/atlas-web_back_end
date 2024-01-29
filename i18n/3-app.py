@@ -31,7 +31,6 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    from flask_babel import _ as translate_text  # Marking string for translation
     return render_template('3-index.html')
 
 
