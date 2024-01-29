@@ -40,6 +40,7 @@ def before_request():
     g.locale = get_locale()
     refresh()
 
+
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """

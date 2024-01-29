@@ -101,6 +101,7 @@ def get_timezone():
     # Third priority: Default to UTC
     return pytz.timezone('UTC')
 
+
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
