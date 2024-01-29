@@ -40,9 +40,7 @@ def get_locale():
 def index():
     """ Return index.html template """
     from flask_babel import _  # Marking string for translation
-    return render_template('3-index.html',
-                           title=_('home_title'),
-                           h1=_('home_header'))
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
