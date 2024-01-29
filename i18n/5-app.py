@@ -42,7 +42,7 @@ def get_user():
     return None
 
 
-@babel.localeselector
+# @babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
     url_locale = request.args.get('locale')
@@ -52,21 +52,25 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-# babel.init_app(app, locale_selector=get_locale)
+babel.init_app(app, locale_selector=get_locale)
 
 
 @app.before_request
 def before_request():
-    """ Set/get current language from request """
-    g.locale = get_locale()
+    """ Set/get current user and
+    current language from request
+    an store them in Flask global objects"""
     g.user = get_user()
+
+    g.locale = get_locale()
+
     refresh()
 
 
 @app.route('/')
 def index():
     """ Return index.html template """
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 if __name__ == '__main__':
