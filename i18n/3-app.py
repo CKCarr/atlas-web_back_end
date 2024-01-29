@@ -15,19 +15,11 @@ class Config:
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
 # Instantiate Babel object in module-level variable babel
 babel = Babel(app)
-
-
-# @app.before_request
-# def before_request():
-#     """ Set/get current language from request
-#         and set it to g.locale for Jinja templates to use """
-#     g.locale = str(get_locale())
 
 
 @babel.localeselector
@@ -40,9 +32,7 @@ def get_locale():
 def index():
     """ Return index.html template """
     from flask_babel import _ as translate_text  # Marking string for translation
-    return render_template('3-index.html',
-                           title=translate_text('home_title'),
-                           heading=translate_text('home_heading'))
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
