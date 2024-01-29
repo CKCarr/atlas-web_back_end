@@ -7,7 +7,7 @@ from flask_babel import Babel
 from flask import g
 
 
-class Config:
+class Config(object):
     """ Configure available languages in our app """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
@@ -17,7 +17,6 @@ class Config:
 app = Flask(__name__)
 # Use Config class as config for our app
 app.config.from_object(Config)
-
 # Instantiate Babel object in module-level variable babel
 babel = Babel(app)
 
@@ -31,7 +30,7 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    return render_template('templates/3-index.html')
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
