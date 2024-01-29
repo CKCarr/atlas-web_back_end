@@ -4,7 +4,6 @@
 """
 from flask import Flask, render_template, request
 from flask_babel import Babel
-from flask_babel import _  # Marking string for translation
 from flask import g
 
 
@@ -40,6 +39,7 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
+    from flask_babel import _  # Marking string for translation
     return render_template('3-index.html',
                            title=_('home_title'),
                            h1=_('home_header'))
