@@ -5,7 +5,6 @@
 from flask import Flask, render_template, request
 from flask_babel import Babel
 from flask import g
-from flask_babel import gettext as _
 
 
 class Config(object):
@@ -31,6 +30,7 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
+    from flask_babel import gettext as _
     return render_template('3-index.html')
 
 
