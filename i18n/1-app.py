@@ -16,7 +16,6 @@ class Config:
 
 # instantiate Flask app object
 app = Flask(__name__)
-
 # use Config class as config for our app
 app.config.from_object(Config)
 # instantiate Babel object in module level variable babel

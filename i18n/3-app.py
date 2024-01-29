@@ -30,10 +30,8 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    return render_template('3-index.html',
-                           title="Welcome to Holberton",
-                           h1="Hello world",)
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
