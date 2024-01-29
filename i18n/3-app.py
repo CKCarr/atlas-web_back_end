@@ -4,7 +4,7 @@
 """
 from flask import Flask, render_template, request
 from flask_babel import Babel
-from flask_babel import _
+# from flask_babel import _
 from flask import g
 
 
@@ -37,15 +37,16 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 # # decorator not working set locale directly
-# babel.localeselector(get_locale)
+babel.localeselector(get_locale)
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
+    from flask_babel import _ as translate_text
     return render_template('3-index.html',
-                           title=_('home_title'),
-                           h1=_('home_header'))
+                           title=translate_text('home_title'),
+                           h1=translate_text('home_header'))
 
 
 if __name__ == '__main__':

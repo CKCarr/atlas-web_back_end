@@ -37,7 +37,7 @@ def get_locale():
 @app.before_request
 def before_request():
     """ Set/get current language from request """
-    g.locale = get_locale()
+    g.locale = str(get_locale())
     refresh()
 
 
