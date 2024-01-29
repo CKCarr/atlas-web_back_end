@@ -1,47 +1,37 @@
 #!/usr/bin/env python3
-""" Basic Flask App """
+""" Create a basic Flask App
+    with a single '/' route and an index.html template
+"""
 from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
 class Config(object):
-    """
-    -------------
-    CLASS: config
-    -------------
-    Description:
-        Initializes config class with class attributes
-        containing the expected configuration for the
-        Babel module.
-    """
+    """ Configure available languages in our app """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
 app = Flask(__name__)
+# Use Config class as config for our app
 app.config.from_object(Config)
+# Instantiate Babel object in module-level variable babel
 babel = Babel(app)
 
 
 @babel.localeselector
 def get_locale():
-    """ Sets up the correct locale """
+    """ Return user preferred locale, if not available return best match """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def root():
-    """
-    ------------
-    METHOD: root
-    ------------
-    Description:
-        Returns a rendered template of an
-        HTML site
-    """
-    return render_template('3-index.html'),
+def index():
+    """ Return index.html template """
+    from flask_babel import gettext as _
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
