@@ -49,3 +49,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    babel.init_app(app, locale_selector=get_locale)
