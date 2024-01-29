@@ -39,8 +39,10 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    from flask_babel import _  # Marking string for translation
-    return render_template('3-index.html')
+    from flask_babel import _ as translate_text  # Marking string for translation
+    return render_template('3-index.html',
+                           title=translate_text('home_title'),
+                           heading=translate_text('home_heading'))
 
 
 if __name__ == '__main__':

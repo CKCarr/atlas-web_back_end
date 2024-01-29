@@ -62,10 +62,6 @@ def before_request():
     an store them in Flask global objects"""
     g.user = get_user()
 
-    g.locale = str(get_locale())
-
-    refresh()
-
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
