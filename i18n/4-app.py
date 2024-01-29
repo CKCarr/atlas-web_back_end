@@ -1,44 +1,47 @@
 #!/usr/bin/env python3
-""" Create a basic Flask App
-    with a single '/' route and an index.html template
+""" Basic Flask app
+for i18n exercise
+flask app to render index.html
 """
-from flask import Flask, render_template, request, g
-from flask_babel import Babel, refresh
-from flask_babel import _
+from flask import Flask, render_template, request
+from flask_babel import Babel
 
 
 class Config:
-    """ Configure available languages in our app """
-    LANGUAGES = ['en', 'fr']
-    BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_DEFAULT_TIMEZONE = 'UTC'
+    """ Config Class for Babel
+    Determine available languages with our Flask application.
+    set default locale and time zone.
+    """
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 app = Flask(__name__)
-# Use Config class as config for our app
+# set config for flask app
 app.config.from_object(Config)
-
-
-# Instantiate Babel object in module-level variable babel
+# initialize babel
 babel = Babel(app)
 
 
 # @babel.localeselector
 def get_locale():
-    """ Return user preferred locale,
-    if not available return best match
-    """
-    url_locale = request.args.get('locale')
-    if url_locale and url_locale in app.config['LANGUAGES']:
-        return url_locale
-    best_match = request.accept_languages.best_match(
-        app.config['LANGUAGES'])
-    return best_match
+    """get_locale function
+    to determine the best match with our supported languages."""
+    # Check if request has locale parameter and if it's supported
+    requested_locale = request.args.get('locale')
+    if requested_locale in app.config['LANGUAGES']:
+        return requested_locale
+    # locale from request header
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
+babel.init_app(app, locale_selector=get_locale)
 
 @app.route('/')
 def index():
-    """ Return index.html template """
+    """ index function
+    to route / request to index.html
+    """
     return render_template('4-index.html')
 
 
