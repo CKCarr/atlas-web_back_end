@@ -6,6 +6,7 @@ from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
+
 class Config:
     """ Configure available languages in our app """
     LANGUAGES = ['en', 'fr']
@@ -14,6 +15,7 @@ class Config:
 
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
@@ -22,7 +24,7 @@ babel = Babel()
 babel.init_app(app)
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
@@ -31,11 +33,11 @@ def get_locale():
 # babel.localeselector(get_locale)
 
 
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    return render_template('2-index.html')
+    return render_template('3-index.html')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

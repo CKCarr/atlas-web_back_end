@@ -21,6 +21,7 @@ class Config:
 
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
@@ -42,7 +43,7 @@ def get_user():
     return None
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
     url_locale = request.args.get('locale')
@@ -52,7 +53,7 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-babel.init_app(app, locale_selector=get_locale)
+# babel.init_app(app, locale_selector=get_locale)
 
 
 @app.before_request
