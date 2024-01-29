@@ -2,8 +2,8 @@
 """ Create a basic Flask App
     with a single '/' route and an index.html template
 """
-from flask import Flask, render_template, request
-from flask_babel import Babel
+from flask import Flask, render_template, request, g
+from flask_babel import Babel, refresh
 
 
 class Config:
@@ -32,6 +32,14 @@ def get_locale():
 
 
 babel.init_app(app, locale_selector=get_locale)
+
+
+@app.before_request
+def before_request():
+    """ Set/get current language from request """
+    g.locale = get_locale()
+    g.user = get_user()
+    refresh()
 
 
 @app.route('/')
