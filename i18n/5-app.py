@@ -42,7 +42,7 @@ def get_user():
     return None
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
     url_locale = request.args.get('locale')
@@ -70,7 +70,7 @@ def before_request():
 @app.route('/')
 def index():
     """ Return index.html template """
-    return render_template('5-index.html')  
+    return render_template('5-index.html')
 
 
 if __name__ == '__main__':

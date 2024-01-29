@@ -42,7 +42,7 @@ def get_user():
     return None
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
     # First priority: user locale from URL parameters
@@ -60,7 +60,7 @@ def get_locale():
     # return app.config['BABEL_DEFAULT_LOCALE'] # default locale
 
 
-babel.init_app(app, locale_selector=get_locale)
+# babel.init_app(app, locale_selector=get_locale)
 
 
 @app.before_request
