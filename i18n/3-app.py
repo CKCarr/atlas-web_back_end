@@ -5,6 +5,7 @@
 from flask import Flask, render_template, request
 from flask_babel import Babel
 from flask import g
+from flask_babel import gettext as _
 
 
 class Config(object):
