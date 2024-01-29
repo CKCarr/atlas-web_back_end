@@ -2,8 +2,10 @@
 """ Create a basic Flask App
     with a single '/' route and an index.html template
 """
+import pytz
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, refresh
+from flask_babel import get_timezone as get_tz
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -52,7 +54,7 @@ def get_locale():
     # Second priority: user locale from user settings
     if g.get('user'):
         user_locale = g.user.get('locale')
-        if user_locale in app.config('LANGUAGES'):
+        if user_locale in app.config['LANGUAGES']:
             return user_locale
     # Third priority: user locale from request header
     return request.accept_languages.best_match(app.config['LANGUAGES'])
@@ -60,7 +62,7 @@ def get_locale():
     # return app.config['BABEL_DEFAULT_LOCALE'] # default locale
 
 
-# babel.init_app(app, locale_selector=get_locale)
+babel.init_app(app, locale_selector=get_locale)
 
 
 @app.before_request
@@ -75,10 +77,35 @@ def before_request():
     refresh()
 
 
+@babel.timezoneselector
+def get_timezone():
+    """  Return user preferred timezone,
+    if not available return best match
+    """
+    # First priority: Timezone from URL parameters
+    tz_param = request.args.get('timezone')
+    if tz_param:
+        try:
+            return pytz.timezone(tz_param)
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
+
+    # Second priority: Time zone from user settings
+    if g.get('user') and g.user.get('timezone'):
+        user_tz = g.user.get('timezone')
+        try:
+            return pytz.timezone(user_tz)
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
+
+    # Third priority: Default to UTC
+    return pytz.timezone('UTC')
+
+
 @app.route('/')
 def index():
     """ Return index.html template """
-    return render_template('5-index.html')
+    return render_template('7-index.html')
 
 
 if __name__ == '__main__':
