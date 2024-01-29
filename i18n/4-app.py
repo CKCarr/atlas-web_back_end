@@ -38,7 +38,6 @@ babel.init_app(app, locale_selector=get_locale)
 def before_request():
     """ Set/get current language from request """
     g.locale = get_locale()
-    g.user = get_user()
     refresh()
 
 
