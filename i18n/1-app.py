@@ -16,14 +16,14 @@ class Config:
 
 # instantiate Flask app object
 app = Flask(__name__)
-app.url_map.strict_slashes = False
+
 # use Config class as config for our app
 app.config.from_object(Config)
 # instantiate Babel object in module level variable babel
 babel = Babel(app)
 
 
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
     return render_template('1-index.html')

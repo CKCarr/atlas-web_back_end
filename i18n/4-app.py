@@ -16,7 +16,6 @@ class Config:
 app = Flask(__name__)
 # Use Config class as config for our app
 app.config.from_object(Config)
-app.url_map.strict_slashes = False
 
 # Instantiate Babel object in module-level variable babel
 babel = Babel(app)
@@ -41,8 +40,7 @@ def before_request():
     g.locale = get_locale()
     refresh()
 
-
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
     return render_template('4-index.html')

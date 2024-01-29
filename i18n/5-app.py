@@ -21,7 +21,6 @@ class Config:
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
@@ -63,12 +62,12 @@ def before_request():
     an store them in Flask global objects"""
     g.user = get_user()
 
-    g.locale = get_locale()
+    g.locale = str(get_locale())
 
     refresh()
 
 
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
     return render_template('5-index.html')

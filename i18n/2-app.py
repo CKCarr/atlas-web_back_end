@@ -14,13 +14,11 @@ class Config:
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
 # Instantiate Babel object in module-level variable babel
-babel = Babel()
-babel.init_app(app)
+babel = Babel(app)
 
 
 # @babel.localeselector
@@ -32,7 +30,7 @@ def get_locale():
 # babel.localeselector(get_locale)
 
 
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
     return render_template('2-index.html')

@@ -23,7 +23,6 @@ class Config:
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 # Use Config class as config for our app
 app.config.from_object(Config)
 
@@ -102,8 +101,7 @@ def get_timezone():
     # Third priority: Default to UTC
     return pytz.timezone('UTC')
 
-
-@app.route('/')
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
     return render_template('7-index.html')

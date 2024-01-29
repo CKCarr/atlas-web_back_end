@@ -5,6 +5,7 @@
 from flask import Flask, render_template, request
 from flask_babel import Babel
 from flask_babel import _
+from flask import g
 
 
 class Config:
@@ -20,8 +21,14 @@ app.url_map.strict_slashes = False
 app.config.from_object(Config)
 
 # Instantiate Babel object in module-level variable babel
-babel = Babel()
-babel.init_app(app)
+babel = Babel(app)
+
+
+@app.before_request
+def before_request():
+    """ Set/get current language from request
+        and set it to g.locale for Jinja templates to use """
+    g.locale = str(get_locale())
 
 
 @babel.localeselector
@@ -36,7 +43,9 @@ def get_locale():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """
-    return render_template('3-index.html')
+    return render_template('3-index.html',
+                           title=_('home_title'),
+                           h1=_('home_header'))
 
 
 if __name__ == '__main__':
