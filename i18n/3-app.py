@@ -10,6 +10,7 @@ app = Flask(__name__)
 # Instantiate Babel object in module-level variable babel
 babel = Babel(app)
 
+
 class Config():
     """ Configure available languages in our app """
     LANGUAGES = ['en', 'fr']
