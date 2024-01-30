@@ -60,9 +60,6 @@ def get_locale():
     # return app.config['BABEL_DEFAULT_LOCALE'] # default locale
 
 
-# babel.init_app(app, locale_selector=get_locale)
-
-
 @app.before_request
 def before_request():
     """ Set/get current user and

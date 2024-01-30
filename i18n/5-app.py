@@ -42,6 +42,14 @@ def get_user():
     return None
 
 
+@app.before_request
+def before_request():
+    """ Set/get current user and
+    current language from request parameters
+    and refresh babel translations """
+    g.user = get_user()
+
+
 @babel.localeselector
 def get_locale():
     """ Return user preferred locale, if not available return best match """
@@ -50,17 +58,6 @@ def get_locale():
         return url_locale
     # if not in url, check user browser settings
     return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
-# babel.init_app(app, locale_selector=get_locale)
-
-
-# @app.before_request
-# def before_request():
-#     """ Set/get current user and
-#     current language from request
-#     an store them in Flask global objects"""
-#     g.user = get_user()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
