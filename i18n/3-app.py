@@ -6,18 +6,19 @@ from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
-class Config(object):
+app = Flask(__name__)
+# Instantiate Babel object in module-level variable babel
+babel = Babel(app)
+
+class Config():
     """ Configure available languages in our app """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
-app = Flask(__name__)
 # Use Config class as config for our app
 app.config.from_object(Config)
-# Instantiate Babel object in module-level variable babel
-babel = Babel(app)
 
 
 @babel.localeselector
