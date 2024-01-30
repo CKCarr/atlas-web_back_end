@@ -70,10 +70,6 @@ def before_request():
     and refresh babel translations """
     g.user = get_user()
 
-    g.locale = get_locale()
-
-    refresh()
-
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():

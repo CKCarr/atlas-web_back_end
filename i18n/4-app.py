@@ -31,16 +31,6 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-# babel.init_app(app, locale_selector=get_locale)
-
-
-# @app.before_request
-# def before_request():
-#     """ Set/get current language from request """
-#     g.locale = str(get_locale())
-#     refresh()
-
-
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index():
     """ Return index.html template """

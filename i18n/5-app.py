@@ -55,12 +55,12 @@ def get_locale():
 # babel.init_app(app, locale_selector=get_locale)
 
 
-@app.before_request
-def before_request():
-    """ Set/get current user and
-    current language from request
-    an store them in Flask global objects"""
-    g.user = get_user()
+# @app.before_request
+# def before_request():
+#     """ Set/get current user and
+#     current language from request
+#     an store them in Flask global objects"""
+#     g.user = get_user()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
