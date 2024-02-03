@@ -15,7 +15,7 @@ DOCKER_IMAGE_NAME = redis_basic
 DOCKER_CONTAINER_NAME = redis_basic_container
 HOST_DIRECTORY=./
 CONTAINER_DIRECTORY=/0x0B_redis_basic
-.PHONY: build run exec stop clean
+.PHONY: build run run-interactive exec stop clean
 
 # Build the Docker image in the current directory
 build:
@@ -27,6 +27,11 @@ build:
 run:
 	@echo "Running the Docker container in the background..."
 	docker run -d --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} ${DOCKER_IMAGE_NAME}
+
+# Run the Docker container in interactive mode with a bash shell
+run-interactive:
+	@echo "Running the Docker container interactively..."
+	docker run -it --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} $(DOCKER_IMAGE_NAME) /bin/bash
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
