@@ -65,6 +65,13 @@ RUN pip3 install requests
 # beautifulsoup4
 RUN pip3 install beautifulsoup4
 
+# Install Rust Compiler (required for bcrypt)
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Verify Rust installation
+RUN rustc --version
+
 # bcrypt
 RUN pip3 install bcrypt
 
