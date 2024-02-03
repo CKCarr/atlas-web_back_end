@@ -49,6 +49,22 @@ class TestCache(unittest.TestCase):
         else:
             self.assertEqual(self.cache.get_int(key), int_value)
 
+    def test_get_list(self):
+        """Test retrieving data as a list."""
+        key = self.cache.store(self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value])
+        self.cache.append(key, self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value, self.value])
+        self.cache.append(key, self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value])
+        self.cache.append(key, self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value])
+        self.cache.append(key, self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value, self.value])
+        self.cache.append(key, self.value)
+        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value, self.value, self.value])
+
+    
 
 if __name__ == '__main__':
     unittest.main()

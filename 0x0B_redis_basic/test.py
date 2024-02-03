@@ -22,3 +22,15 @@ for value, fn in TEST_CASES.items():
     assert cache.get(key, fn=fn) == value
     assert cache.get_str(key) == str(value)
     assert cache.get_int(key) == int(value)
+    assert cache.get_list(key) == [value]
+    cache.append(key, value)
+    assert cache.get_list(key) == [value, value]
+    cache.append(key, value)
+    assert cache.get_list(key) == [value, value, value]
+    cache.append(key, value)
+    assert cache.get_list(key) == [value, value, value, value]
+    cache.append(key, value)
+    assert cache.get_list(key) == [value, value, value, value, value]
+    cache.append(key, value)
+    assert cache.get_list(key) == [value, value, value, value, value, value]
+    cache.append(key, value)

@@ -10,6 +10,7 @@
 
 import redis
 import uuid
+import functools
 from typing import Union, Callable, Optional, Any
 
 
@@ -21,6 +22,33 @@ def decode_utf8(data: bytes) -> str:
         str: the decoded string
     """
     return data.decode("utf-8")
+
+
+def count_calls(method: Callable) -> Callable:
+    """ count_calls decorator that counts how many times a method is called
+    Args:
+        method: the method to decorate
+    Returns:
+        Callable: the decorated method
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """ wrapper function that wraps the input method
+        Args:
+            self: the Cache instance
+            *args: the input arguments
+            **kwargs: the input keyword arguments
+        Returns:
+            Any: the result of the input method
+        """
+        # get the method name
+        method_name_keys = method.__qualname__
+        # increment the method call count
+        self._redis.incr(method_name_keys)
+        # return the result of the input method
+        return method(self, *args, **kwargs)
+    # return the wrapper function
+    return wrapper
 
 
 class Cache:
@@ -53,6 +81,7 @@ class Cache:
         # Flush the existing Redis instance
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ store the input data in Redis using the input key
         Args:
