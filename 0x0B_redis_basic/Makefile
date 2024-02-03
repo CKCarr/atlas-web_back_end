@@ -4,6 +4,12 @@
 # Created by: CKCarr
 # Created on: 02/02/2024
 
+# Color definitions
+RED=\033[0;31m
+GREEN=\033[0;32m
+YELLOW=\033[1;33m
+NC=\033[0m # No Color
+
 # Default action if no target is specified
 # make - will execute the build target
 .DEFAULT_GOAL := build
@@ -19,20 +25,20 @@ CONTAINER_DIRECTORY=/0x0B_redis_basic
 
 # Build the Docker image in the current directory
 build:
-	@echo "Building the Docker image..."
+	@echo "${GREEN}Building the Docker image...${NC}"
 	docker build -t $(DOCKER_IMAGE_NAME) .
 
 # Run the Docker container in the background "-d" -detached
 #  with the current directory mounted to the container directory
 run:
-	@echo "Running the Docker container in the background..."
+	@echo "${GREEN}Running the Docker container in the background...${NC}"
 	docker run -d --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} ${DOCKER_IMAGE_NAME}
 
 # Run the Docker container in interactive mode with a bash shell
 # This is useful for debugging and running commands inside the container
 run-interactive:
-	@echo "Running the Docker container interactively..."
-	@echo "Type 'exit' to stop the container and return to the host shell."
+	@echo "${GREEN}Running the Docker container interactively...${NC}"
+	@echo "${YELLOW}Type 'exit' to stop the container and return to the host shell.${NC}"
 	docker run -it --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} $(DOCKER_IMAGE_NAME) /bin/bash
 
 # Execute a bash shell in the Docker container for debugging purposes
@@ -41,13 +47,13 @@ run-interactive:
 CMD ?= "bash"
 
 exec-cmd:
-	@echo "Executing a bash shell inside the Docker container..."
+	@echo "${YELLOW}Executing a bash shell inside the Docker container...$(NC)"
 	docker exec -it $(DOCKER_CONTAINER_NAME) /bin/bash -c $(CMD)
 
 # Stop running Docker container and remove it
 # This frees up resources
 stop:
-	@echo "Stopping and removing the Docker container..."
+	@echo "${RED}Stopping and removing the Docker container...${NC}"
 	docker stop $(DOCKER_CONTAINER_NAME)
 	docker rm $(DOCKER_CONTAINER_NAME)
 
@@ -55,7 +61,7 @@ stop:
 # This is useful for removing all traces of the Docker container
 # and image from the system
 clean:
-	@echo "Cleaning up the Docker container and image..."
+	@echo "${RED}Cleaning up the Docker container and image...${NC}"
 	docker stop $(DOCKER_CONTAINER_NAME) || true
 	docker rm $(DOCKER_CONTAINER_NAME) || true
 	docker rmi $(DOCKER_IMAGE_NAME) || true
