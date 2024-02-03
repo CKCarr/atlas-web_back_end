@@ -46,7 +46,9 @@ def count_calls(method: Callable) -> Callable:
         # increment the method call count
         self._redis.incr(method_name_keys)
         # return the result of the input method
-        return method(self, *args, **kwargs)
+        output = method(self, *args, **kwargs)
+        # return the output of the original method
+        return output
     # return the wrapper function
     return wrapper
 
@@ -85,6 +87,49 @@ def call_history(method: Callable) -> Callable:
 
         # return the output of the original method
         return output
+    # return the wrapper function
+    return wrapper
+
+
+def replay(method: Callable) -> Callable:
+    """ replay decorator that displays the history
+    of calls of a particular function
+    Args:
+        method: the method to decorate
+    Returns:
+        Callable: the decorated method
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """ wrapper function that wraps the input method
+        Args:
+            self: the Cache instance
+            *args: the input arguments
+            **kwargs: the input keyword arguments
+        Returns:
+            Any: the result of the input method
+        """
+        # get the method name
+        method_name_keys = f"{method.__qualname__}"
+        # get the method call count
+        count = self._redis.get(method_name_keys)
+        # get the input key
+        input_key = f"{method.__qualname__}:inputs"
+        # get the output key
+        output_key = f"{method.__qualname__}:outputs"
+        # get the input list
+        inputs = self._redis.lrange(input_key, 0, -1)
+        # get the output list
+        outputs = self._redis.lrange(output_key, 0, -1)
+        # print the method name and call count
+        print(f"{method_name_keys} was called {count.decode('utf-8')} times:")
+        # iterate over the inputs and outputs
+        for i, o in zip(inputs, outputs):
+            # print the input and output
+            print(f"{method_name_keys}(*{i.decode('utf-8')}) -> \
+                {o.decode('utf-8')}")
+        # return the result of the input method
+        return method(self, *args, **kwargs)
     # return the wrapper function
     return wrapper
 
