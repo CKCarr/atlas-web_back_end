@@ -42,7 +42,7 @@ def count_calls(method: Callable) -> Callable:
             Any: the result of the input method
         """
         # get the method name
-        method_name_keys = f"count:{method.__qualname__}"
+        method_name_keys = f"{method.__qualname__}:count"
         # increment the method call count
         self._redis.incr(method_name_keys)
         # return the result of the input method
