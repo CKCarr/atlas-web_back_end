@@ -29,16 +29,20 @@ run:
 	docker run -d --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} ${DOCKER_IMAGE_NAME}
 
 # Run the Docker container in interactive mode with a bash shell
+# This is useful for debugging and running commands inside the container
 run-interactive:
 	@echo "Running the Docker container interactively..."
+	@echo "Type 'exit' to stop the container and return to the host shell."
 	docker run -it --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} $(DOCKER_IMAGE_NAME) /bin/bash
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
-# Example: make exec-cmd CMD="ls -l"
+# Example: make exec-cmd CMD="ls -l" - will execute "ls -l" inside the container
+CMD ?= "bash"
+
 exec-cmd:
 	@echo "Executing a bash shell inside the Docker container..."
-	docker exec -it $(DOCKER_CONTAINER_NAME) $(CMD)
+	docker exec -it $(DOCKER_CONTAINER_NAME) /bin/bash -c $(CMD)
 
 # Stop running Docker container and remove it
 # This frees up resources

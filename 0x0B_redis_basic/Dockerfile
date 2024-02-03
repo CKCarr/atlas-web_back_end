@@ -92,9 +92,20 @@ RUN apt-get install -y tidy
 # Create test user
 RUN useradd -M correction_tester
 
+# Install Redis
+RUN apt-get update && apt-get install -y redis-server && \
+    sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
+
+# Install Redis Python client
+RUN pip3 install redis
+
 # Set the locale
 RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+ENTRYPOINT ["/start.sh"]
