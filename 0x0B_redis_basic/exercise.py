@@ -99,39 +99,25 @@ def replay(method: Callable) -> Callable:
     Returns:
         Callable: the decorated method
     """
-    @functools.wraps(method)
-    def wrapper(self, *args, **kwargs):
-        """ wrapper function that wraps the input method
-        Args:
-            self: the Cache instance
-            *args: the input arguments
-            **kwargs: the input keyword arguments
-        Returns:
-            Any: the result of the input method
-        """
-        # get the method name
-        method_name_keys = f"{method.__qualname__}"
-        # get the method call count
-        count = self._redis.get(method_name_keys)
-        # get the input key
-        input_key = f"{method.__qualname__}:inputs"
-        # get the output key
-        output_key = f"{method.__qualname__}:outputs"
-        # get the input list
-        inputs = self._redis.lrange(input_key, 0, -1)
-        # get the output list
-        outputs = self._redis.lrange(output_key, 0, -1)
-        # print the method name and call count
-        print(f"{method_name_keys} was called {count.decode('utf-8')} times:")
-        # iterate over the inputs and outputs
-        for i, o in zip(inputs, outputs):
-            # print the input and output
-            print(f"{method_name_keys}(*{i.decode('utf-8')}) -> \
-                {o.decode('utf-8')}")
-        # return the result of the input method
-        return method(self, *args, **kwargs)
-    # return the wrapper function
-    return wrapper
+    qualified_name = method.__qualname__
+    store_count_key = f"count:{qualified_name}"
+    inputs_key = f"{qualified_name}:inputs"
+    outputs_key = f"{qualified_name}:outputs"
+
+    # Get the number of times the method was called
+    call_count = int(cache_instance._redis.get(store_count_key) or 0)
+
+    # Get the history of inputs and outputs
+    inputs = cache_instance._redis.lrange(inputs_key, 0, -1)
+    outputs = cache_instance._redis.lrange(outputs_key, 0, -1)
+
+    # Display the method call count
+    print(f"{qualified_name} was called {call_count} times:")
+
+    # Display the history of inputs and outputs
+    for input_, output in zip(inputs, outputs):
+        print(f"{qualified_name}(*{input_.decode('utf-8')}) -> \
+            {output.decode('utf-8')}")
 
 
 class Cache:
