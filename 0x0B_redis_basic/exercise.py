@@ -75,7 +75,7 @@ def call_history(method: Callable) -> Callable:
         output_key = f"{method.__qualname__}:outputs"
 
         # store the input arguments in the input key
-        self.redis.rpush(input_key, str(args))
+        self._redis.rpush(input_key, str(args))
 
         # execute the wrap function and store the output
         output = method(self, *args, **kwargs)
