@@ -42,7 +42,7 @@ def count_calls(method: Callable) -> Callable:
             Any: the result of the input method
         """
         # get the method name
-        method_name_keys = method.__qualname__
+        method_name_keys = f"{method.__qualname__}"
         # increment the method call count
         self._redis.incr(method_name_keys)
         # return the result of the input method
@@ -101,7 +101,7 @@ class Cache:
         get_int: return the int value of the input key
         get_list: return the list value of the input key
         append: append the value to the list stored at the input key
-        retrive: return the list value of the input key
+        retrieve: return the list value of the input key
     """
     # store an instance of the Redis client as a private variable
     # class variable, typing annotation
