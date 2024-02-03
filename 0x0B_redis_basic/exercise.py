@@ -13,6 +13,16 @@ import uuid
 from typing import Union, Callable, Optional, Any
 
 
+def decode_utf8(data: bytes) -> str:
+    """ decode_utf8 function that returns a string
+    Args:
+        data: bytes to decode
+    Returns:
+        str: the decoded string
+    """
+    return data.decode("utf-8")
+
+
 class Cache:
     """ Cache class created an instance of the Redis client
 
@@ -56,3 +66,59 @@ class Cache:
         self._redis.set(generated_key, data)
         # return the generated key
         return generated_key
+
+    def get(self, key: str, fn: Optional[Callable] = None) -> Any:
+        """ return the value of the input key
+        Args:
+            key: the input key to retrieve the value
+            fn: the function to recover the original type
+        Returns:
+            Any: the value of the input key
+        """
+        # get the value of the input key
+        value = self._redis.get(key)
+        # if the value is not None and the function is not None
+        if value is not None and fn is not None:
+            # return the value after applying the function
+            return fn(value)
+        # return the value if it is not None
+        return value
+
+    def get_str(self, key: str) -> Optional[str]:
+        """ method returns the string value of the input key
+        Args:
+            key: the input key to retrieve the value
+        Returns:
+            str: the string value of the input key
+        """
+        # validate the input key
+        if key is None:
+            return None
+        # get the value of the input key
+        value = self.get(key)
+        # if value is not None, return the string value
+        if value is not None:
+            value = decode_utf8(value)
+        # return the value if it is not None
+        return value
+
+    def get_int(self, key: str) -> Optional[int]:
+        """ method returns the int value of the input key
+        Args:
+            key: the input key to retrieve the value
+        Returns:
+            int: the int value of the input key
+        """
+        # validate the input key
+        if key is None:
+            return None
+        # get the value of the input key
+        value = self.get(key)
+        # if value is not None, return the int value
+        if value is not None:
+            try:
+                value = int(value)
+            except ValueError:
+                return None
+        # return the value if it is not None
+        return value

@@ -7,11 +7,7 @@
     3. Storing lists
     4. Retrieving lists
 """
-import unittest
 from exercise import Cache
-# add `# type: ignore` to the problematic import
-from parameterized import parameterized # type: ignore
-
 
 cache = Cache()
 
@@ -23,6 +19,6 @@ TEST_CASES = {
 
 for value, fn in TEST_CASES.items():
     key = cache.store(value)
-
-if __name__ == '__main__':
-    unittest.main()
+    assert cache.get(key, fn=fn) == value
+    assert cache.get_str(key) == str(value)
+    assert cache.get_int(key) == int(value)
