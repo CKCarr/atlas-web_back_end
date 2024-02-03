@@ -15,7 +15,7 @@ DOCKER_IMAGE_NAME = redis_basic
 DOCKER_CONTAINER_NAME = redis_basic_container
 HOST_DIRECTORY=./
 CONTAINER_DIRECTORY=/0x0B_redis_basic
-.PHONY: build run run-interactive exec stop clean
+.PHONY: build run run-interactive exec-cmd stop clean
 
 # Build the Docker image in the current directory
 build:
@@ -35,9 +35,10 @@ run-interactive:
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
-exec:
+# Example: make exec-cmd CMD="ls -l"
+exec-cmd:
 	@echo "Executing a bash shell inside the Docker container..."
-	docker exec -it $(DOCKER_CONTAINER_NAME) bash
+	docker exec -it $(DOCKER_CONTAINER_NAME) $(CMD)
 
 # Stop running Docker container and remove it
 # This frees up resources
