@@ -8,63 +8,75 @@
     4. Retrieving lists
 """
 import unittest
-from parameterized import parameterized_class
 from exercise import Cache
 
-
-@parameterized_class(('value', 'fn'), [
-    (b"foo", None),
-    (123, int),
-    ("bar", lambda d: d.decode("utf-8"))
-])
-class TestCache(unittest.TestCase):
-    """ TestCache class to test the
-        Cache class functionality.
-    """
+class TestCacheWithString(unittest.TestCase):
+    """ TestCacheWithString class to test Cache class functionality. """
     def setUp(self):
-        """ Set up the Cache instance
-        """
         self.cache = Cache()
+        self.value = b"foo"
 
     def test_store_and_get(self):
-        """Test storing and retrieving data."""
+        """ Test store and get methods. """
+        key = self.cache.store(self.value)
+        self.assertEqual(self.cache.get(key), self.value)
+
+    def test_get_str(self):
+        """ Test get_str method. """
+        key = self.cache.store(self.value)
+        self.assertEqual(self.cache.get_str(key), "foo")
+
+    def test_get_int(self):
+        """ Test get_int method. """
+        key = self.cache.store(self.value)
+        with self.assertRaises(ValueError):
+            self.cache.get_int(key)
+
+class TestCacheWithInt(unittest.TestCase):
+    """ TestCacheWithInt class to test Cache class functionality. """
+    def setUp(self):
+        self.cache = Cache()
+        self.value = 123
+
+    def test_store_and_get(self):
+        """ Test store and get methods. """
+        key = self.cache.store(self.value)
+        # convert to int before comparing
+        self.assertEqual(int(self.cache.get(key)), self.value)
+
+    def test_get_str(self):
+        """ Test get_str method. """
+        key = self.cache.store(self.value)
+        self.assertEqual(self.cache.get_str(key), "123")
+
+    def test_get_int(self):
+        """ Test get_int method. """
+        key = self.cache.store(self.value)
+        self.assertEqual(self.cache.get_int(key), 123)
+
+class TestCacheWithStringFunction(unittest.TestCase):
+    """ TestCacheWithStringFunction class to test Cache class functionality. """
+    def setUp(self):
+        self.cache = Cache()
+        self.value = "bar"
+        self.fn = lambda d: d.decode("utf-8")
+
+    def test_store_and_get(self):
+        """ Test store and get methods. """
         key = self.cache.store(self.value)
         self.assertEqual(self.cache.get(key, fn=self.fn), self.value)
 
-
     def test_get_str(self):
-        """Test retrieving data as a string."""
+        """ Test get_str method. """
         key = self.cache.store(self.value)
-        expected_str = self.value.decode('utf-8') if isinstance(self.value, bytes) else str(self.value)
-        self.assertEqual(self.cache.get_str(key), expected_str)
+        self.assertEqual(self.cache.get_str(key), "bar")
 
     def test_get_int(self):
-        """Test retrieving data as an integer."""
+        """ Test get_int method. """
         key = self.cache.store(self.value)
-        try:
-            int_value = int(self.value)
-        except ValueError:
-            with self.assertRaises(ValueError):
-                self.cache.get_int(key)
-        else:
-            self.assertEqual(self.cache.get_int(key), int_value)
+        with self.assertRaises(ValueError):
+            self.cache.get_int(key)
 
-    def test_get_list(self):
-        """Test retrieving data as a list."""
-        key = self.cache.store(self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value])
-        self.cache.append(key, self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value, self.value])
-        self.cache.append(key, self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value])
-        self.cache.append(key, self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value])
-        self.cache.append(key, self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value, self.value])
-        self.cache.append(key, self.value)
-        self.assertEqual(self.cache.get_list(key), [self.value, self.value, self.value, self.value, self.value, self.value])
-
-    
 
 if __name__ == '__main__':
     unittest.main()

@@ -42,7 +42,7 @@ def count_calls(method: Callable) -> Callable:
             Any: the result of the input method
         """
         # get the method name
-        method_name_keys = f"{method.__qualname__}"
+        method_name_keys = method.__qualname__
         # increment the method call count
         self._redis.incr(method_name_keys)
         # return the result of the input method
@@ -89,35 +89,6 @@ def call_history(method: Callable) -> Callable:
         return output
     # return the wrapper function
     return wrapper
-
-
-def replay(method: Callable) -> Callable:
-    """ replay decorator that displays the history
-    of calls of a particular function
-    Args:
-        method: the method to decorate
-    Returns:
-        Callable: the decorated method
-    """
-    qualified_name = method.__qualname__
-    store_count_key = f"count:{qualified_name}"
-    inputs_key = f"{qualified_name}:inputs"
-    outputs_key = f"{qualified_name}:outputs"
-
-    # Get the number of times the method was called
-    call_count = int(cache_instance._redis.get(store_count_key) or 0)
-
-    # Get the history of inputs and outputs
-    inputs = cache_instance._redis.lrange(inputs_key, 0, -1)
-    outputs = cache_instance._redis.lrange(outputs_key, 0, -1)
-
-    # Display the method call count
-    print(f"{qualified_name} was called {call_count} times:")
-
-    # Display the history of inputs and outputs
-    for input_, output in zip(inputs, outputs):
-        print(f"{qualified_name}(*{input_.decode('utf-8')}) -> \
-            {output.decode('utf-8')}")
 
 
 class Cache:
@@ -216,8 +187,8 @@ class Cache:
         # if value is not None, return the int value
         if value is not None:
             try:
-                value = int(value)
-            except ValueError:
-                return None
+                return int(value)
+            except Exception as e:
+                raise ValueError(f"Value at {key} is not an int") from e
         # return the value if it is not None
-        return value
+        return None
