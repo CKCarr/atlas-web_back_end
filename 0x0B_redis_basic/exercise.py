@@ -14,16 +14,6 @@ import functools
 from typing import Union, Callable, Optional, Any
 
 
-def decode_utf8(data: bytes) -> str:
-    """ decode_utf8 function that returns a string
-    Args:
-        data: bytes to decode
-    Returns:
-        str: the decoded string
-    """
-    return data.decode("utf-8")
-
-
 def count_calls(method: Callable) -> Callable:
     """count_calls decorator that counts how many times a method is called"""
     # Get the method name
@@ -178,7 +168,7 @@ class Cache:
         value = self.get(key)
         # if value is not None, return the string value
         if value is not None:
-            value = decode_utf8(value)
+            value = value.decode("utf-8")
         # return the value if it is not None
         return value
 
