@@ -150,3 +150,7 @@ r.set('foo', 'bar')
 value = r.get('foo')
 print(value)  # Output: b'bar'
 ```
+
+side note for wrapping functions and decorators:
+
+ - decorators are applied in the order they appear from top to bottom. Each decorator wraps the function with additional behavior or functionality. When you have multiple decorators applied to a single function, the order of execution can affect the final behavior of that function.
