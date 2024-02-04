@@ -41,7 +41,9 @@ def count_calls(method: Callable) -> Callable:
     # Return the wrapper function
     return wrapper
 
+
 def replay(cache_instance, method):
+    """ replay function that displays the history of calls of a particular """
     qualified_name = method.__qualname__
     store_count_key = f"count:{qualified_name}"
     inputs_key = f"{qualified_name}:inputs"
@@ -59,7 +61,8 @@ def replay(cache_instance, method):
 
     # Display the history of inputs and outputs
     for input_, output in zip(inputs, outputs):
-        print(f"{qualified_name}(*{input_.decode('utf-8')}) -> {output.decode('utf-8')}")
+        print(f"{qualified_name}(*{input_.decode('utf-8')}) -> \
+            {output.decode('utf-8')}")
 
 
 def call_history(method: Callable) -> Callable:
