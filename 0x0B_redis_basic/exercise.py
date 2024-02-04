@@ -41,16 +41,14 @@ def count_calls(method: Callable) -> Callable:
         Returns:
             Any: the result of the input method
         """
-        # get the method name
-        method_name_keys = (method.__qualname__)
-        # increment the method call count
-        self._redis.incr(method_name_keys)
-        # return the result of the input method
-        output = method(self, *args, **kwargs)
+        # generate the method name key for the input method
+        method_key = f"{method.__qualname__}:count"
+
+        # increment the count of the input method
+        self._redis.incr(method_key)
+
         # return the output of the original method
-        return output
-    # return the wrapper function
-    return wrapper
+        return method(self, *args, **kwargs)
 
 
 def call_history(method: Callable) -> Callable:
