@@ -26,43 +26,41 @@ def decode_utf8(data: bytes) -> str:
 
 def count_calls(method: Callable) -> Callable:
     """count_calls decorator that counts how many times a method is called"""
+    # Get the method name
+    key = method.__qualname__
+
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         """Wrapper function that wraps the input method"""
-        # Form the key for counting calls using the method's qualified name
-        key = f"count:{method.__qualname__}"
-
         # Increment the method call count in Redis
         self._redis.incr(key)
-
         # Call the original method and return its result
         return method(self, *args, **kwargs)
-
     # Return the wrapper function
     return wrapper
 
 
-def replay(cache_instance, method):
-    """ replay function that displays the history of calls of a particular """
-    qualified_name = method.__qualname__
-    store_count_key = f"count:{qualified_name}"
-    inputs_key = f"{qualified_name}:inputs"
-    outputs_key = f"{qualified_name}:outputs"
-
+def replay(method: Callable) -> None:
+    """ replay function that displays the history
+        of calls of a particular function
+    Args:
+        method: the input method
+    Returns:
+        None
+    """
+    # Get the method name
+    key = method.__qualname__
+    # Get the Redis instance
+    r = redis.Redis()
     # Get the number of times the method was called
-    call_count = int(cache_instance._redis.get(store_count_key) or 0)
-
-    # Get the history of inputs and outputs
-    inputs = cache_instance._redis.lrange(inputs_key, 0, -1)
-    outputs = cache_instance._redis.lrange(outputs_key, 0, -1)
-
-    # Display the method call count
-    print(f"{qualified_name} was called {call_count} times:")
-
-    # Display the history of inputs and outputs
-    for input_, output in zip(inputs, outputs):
-        print(f"{qualified_name}(*{input_.decode('utf-8')}) -> \
-            {output.decode('utf-8')}")
+    count = r.get(key).decode_utf8() if r.get(key) else 0
+    # Get the inputs and outputs of the method
+    inputs = r.lrange(f"{key}:inputs", 0, -1)
+    outputs = r.lrange(f"{key}:outputs", 0, -1)
+    # Print the history of calls of the method
+    print(f"{key} was called {count} times:")
+    for i, o in zip(inputs, outputs):
+        print(f"{key}(*{i.decode_utf8()}) -> {o.decode_utf8()}")
 
 
 def call_history(method: Callable) -> Callable:
