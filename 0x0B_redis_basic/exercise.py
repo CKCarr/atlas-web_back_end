@@ -42,7 +42,7 @@ def replay(method: Callable) -> None:
     # Get the Redis instance
     r = redis.Redis()
     # Get the number of times the method was called
-    count = r.get(key).decode("utf-8") if r.get(key) else 0
+    count = r.get(key).decode("utf-8")
     # Get the inputs and outputs of the method
     inputs = r.lrange(f"{key}:inputs", 0, -1)
     outputs = r.lrange(f"{key}:outputs", 0, -1)
