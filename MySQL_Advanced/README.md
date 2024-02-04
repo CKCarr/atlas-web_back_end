@@ -67,25 +67,83 @@ $
 In the container, credentials are root/root
 
 ## How to import a SQL dump
-The initial part of your request involves importing a SQL dump into a MySQL database, which is a common task when setting up databases or transferring data. The rest of the tasks involve various SQL operations, including creating tables, indexes, triggers, stored procedures, and functions. We'll go through each task and provide guidance and best practices.
-
-Importing a SQL Dump
+The initial part of your request involves importing a SQL dump into a MySQL database, which is a common task when setting up databases or transferring data. The rest of the tasks involve various SQL operations, including creating tables, indexes, triggers, stored procedures, and functions.
+### Importing a SQL Dump
 Create the database if it doesn't already exist:
 
 ~~~ sh
 
 echo "CREATE DATABASE hbtn_0d_tvshows;" | mysql -uroot -p
+~~~
 Import the SQL dump. The curl command fetches the SQL dump file, and the pipe | directs the output to the mysql command to import it into your database:
 
-sh
-Copy code
+~~~ sh
+
 curl "https://s3.eu-west-3.amazonaws.com/hbtn.intranet.project.files/holbertonschool-higher-level_programming+/274/hbtn_0d_tvshows.sql" -s | mysql -uroot -p hbtn_0d_tvshows
+~~~
 Verify the import by querying the database:
 
-sh
-Copy code
+~~~sh
+
 echo "SELECT * FROM tv_genres" | mysql -uroot -p hbtn_0d_tvshows
 ~~~
+
+# Using MySQL in a container 
+Using a "container-on-demand" service to run MySQL can provide a flexible and isolated environment for your database operations. Here's a step-by-step guide on how you can set up and use MySQL in a container running Ubuntu 18.04 and Python 3.7:
+
+## 1. Start the Container
+Request a container with Ubuntu 18.04 and Python 3.7.
+Once the container is ready, connect to it via SSH or the WebTerminal provided by the container platform.
+
+## 2. Start MySQL Service
+After connecting to the container, you'll need to start the MySQL service. You can do this by running the following command:
+
+~~~sh
+
+service mysql start
+~~~
+You should see a message indicating that MySQL Community Server 5.7.30 has started.
+
+## 3. Interacting with MySQL
+You can interact with MySQL using the mysql command-line tool. Since the credentials in the container are root/root, you won't need to enter a password if you're logging in as the root user.
+
+- To execute SQL commands from a file (like 0-list_databases.sql), you can use the following syntax:
+
+~~~sh
+
+cat 0-list_databases.sql | mysql -uroot -p my_database
+~~~
+- When prompted for a password, enter 'root' (if it's set), or just press Enter if no password is set.
+
+## 4. Common MySQL Commands in the Container
+- Listing Databases: To list all databases, you can use the SQL file (as you've shown) or directly run:
+
+~~~sh
+
+echo "SHOW DATABASES;" | mysql -uroot -p
+~~~
+- Creating a Database: You can create a new database by running:
+
+~~~ sh
+
+echo "CREATE DATABASE my_new_database;" | mysql -uroot -p
+~~~
+- Selecting a Database: To start working with a specific database:
+
+~~~sh
+
+mysql -uroot -p -D my_database
+~~~
+- Running SQL Scripts: To run a SQL script from a file:
+
+~~~sh
+
+mysql -uroot -p my_database < my_script.sql
+~~~
+## Best Practices & Tips
+- Security: Even if it's just a container, avoid using simple passwords like 'root/root'. If this container is accessible from the internet, it could be a security risk.
+- Persistence: Remember that containers are ephemeral. If you stop your container, you might lose your database unless you're using a data volume to persist the data.
+- Backups: Regularly backup your data, especially if you're using this setup for development and testing.
 
 # SQL Tasks
 
@@ -151,3 +209,52 @@ Create a function SafeDiv that safely divides two numbers and handles division b
 ├── Dockerfile
 ├── Makefile
 └─ README.md
+
+<hr>
+
+#  Advanced SQL concepts using MySQL
+
+## 1. Creating Tables with Constraints
+When you create tables, constraints are rules you apply to the columns to ensure data integrity. Common constraints include:
+
+- PRIMARY KEY: Uniquely identifies each record in a table.
+- FOREIGN KEY: Ensures referential integrity by linking columns of multiple tables.
+- NOT NULL: Ensures that a column cannot have a NULL value.
+- UNIQUE: Ensures all values in a column are different.
+- CHECK: Ensures the value in the column meets a specific condition.
+
+Best Practice: Always define primary keys for your tables to ensure each record can be uniquely identified. Use foreign keys to maintain data integrity across related tables.
+
+## 2. Optimizing Queries by Adding Indexes
+Indexes are used to speed up the retrieval of rows from a table. Proper indexing can significantly improve the performance of your database.
+
+Use the EXPLAIN statement before your SELECT queries to understand how MySQL will execute your query and whether it will use indexes.
+
+Use the CREATE INDEX statement to add indexes to columns that are frequently used in the WHERE, ORDER BY, and JOIN conditions.
+
+Best Practice: While indexes speed up querying, they slow down data insertion and modification. So, balance the number of indexes and only create them on columns that are frequently used in search conditions.
+
+## 3. Stored Procedures and Functions
+Stored Procedures and Functions are SQL statements that are stored in the database and can be executed whenever you need to perform the operation.
+
+Stored Procedures: Perform a sequence of operations. They can have input/output parameters.
+
+Functions: Perform operations and must return a value.
+
+Best Practice: Use stored procedures and functions for operations that are performed frequently. This encapsulates logic in the database, promotes code reuse, and can improve performance.
+
+## 4. Views in MySQL
+Views are virtual tables that are based on the result-set of an SQL statement. They don't store data themselves but display data stored in other tables.
+
+Use the CREATE VIEW statement to create a view.
+Views can be used to simplify complex queries, ensure data security, and present data in a specific format.
+
+Best Practice: Use views to abstract complexity and ensure users only have access to specific data in a controlled manner.
+
+## 5. Triggers in MySQL
+Triggers are database operations that are automatically performed when certain events occur.
+
+Use triggers to enforce business rules, validate input data, and maintain audit logs.
+Be cautious with triggers as they can make debugging more complex.
+
+Best Practice: Ensure that triggers are used sparingly and only for operations that cannot be handled at the application level. Keep the logic within triggers simple and efficient.
