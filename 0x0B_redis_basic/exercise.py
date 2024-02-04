@@ -49,7 +49,7 @@ def replay(method: Callable) -> None:
     # Print the history of calls of the method
     print(f"{key} was called {count} times:")
     for i, o in zip(inputs, outputs):
-        print(f"{key}(*{i.decode_utf8()}) -> {o.decode_utf8()}")
+        print(f"{key(*i.decode('utf-8'))} -> {o.decode('utf-8')}")
 
 
 def call_history(method: Callable) -> Callable:
