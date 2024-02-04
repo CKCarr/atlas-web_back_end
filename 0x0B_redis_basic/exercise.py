@@ -16,12 +16,11 @@ from typing import Union, Callable, Optional, Any
 
 def count_calls(method: Callable) -> Callable:
     """count_calls decorator that counts how many times a method is called"""
-    # Get the method name
-    key = method.__qualname__
 
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         """Wrapper function that wraps the input method"""
+        key = method.__qualname__
         # Increment the method call count in Redis
         self._redis.incr(key)
         # Call the original method and return its result
@@ -121,8 +120,8 @@ class Cache:
         # Flush the existing Redis instance
         self._redis.flushdb()
 
-    @call_history
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ store the input data in Redis using the input key
         Args:
