@@ -1,6 +1,7 @@
 # Description: Makefile for the Redis basic project.
 # This Makefile is used to manage Docker containers and images for development and testing.
-# This Makefile is used to build, run, execute, stop, and clean the Docker container.
+# This Makefile is used to
+# build run run-interactive exec-cmd stop clean the Docker container.
 # Created by: CKCarr
 # Created on: 02/02/2024
 
@@ -17,10 +18,10 @@ NC=\033[0m # No Color
 # Docker image variables for container names and directories
 # The HOST_DIRECTORY is the current directory
 # the CONTAINER_DIRECTORY is the directory inside the Docker container
-DOCKER_IMAGE_NAME = redis_basic
-DOCKER_CONTAINER_NAME = redis_basic_container
+DOCKER_IMAGE_NAME = mysql_advanced
+DOCKER_CONTAINER_NAME = mysql_advanced_container
 HOST_DIRECTORY=./
-CONTAINER_DIRECTORY=/0x0B_redis_basic
+CONTAINER_DIRECTORY=/mysql_advanced
 .PHONY: build run run-interactive exec-cmd stop clean
 
 # Build the Docker image in the current directory
