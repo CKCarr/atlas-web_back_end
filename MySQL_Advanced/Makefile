@@ -1,9 +1,15 @@
 # Description: Makefile for the Redis basic project.
 # This Makefile is used to manage Docker containers and images for development and testing.
 # This Makefile is used to
-# build run run-interactive exec-cmd stop clean the Docker container.
+# build status start run exec stop clean deep-clean the Docker container.
 # Created by: CKCarr
 # Created on: 02/02/2024
+
+# define a function to log make file executions for targets start and stop
+define log_and_run
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Running command $(1)" | tee -a make.log
+	@$(1) >> make.log 2>&1
+endef
 
 # Color definitions
 RED=\033[0;31m
@@ -12,6 +18,7 @@ YELLOW=\033[1;33m
 NC=\033[0m # No Color
 
 # Default action if no target is specified
+
 # make - will execute the build target
 .DEFAULT_GOAL := build
 
@@ -22,47 +29,87 @@ DOCKER_IMAGE_NAME = mysql_advanced
 DOCKER_CONTAINER_NAME = mysql_advanced_container
 HOST_DIRECTORY=./
 CONTAINER_DIRECTORY=/mysql_advanced
-.PHONY: build run run-interactive exec-cmd stop clean
+MYSQL_VOLUME_NAME = mysql_data_volume
+.PHONY: build status start run exec stop clean deep-clean
 
 # Build the Docker image in the current directory
 build:
 	@echo "${GREEN}Building the Docker image...${NC}"
 	docker build -t $(DOCKER_IMAGE_NAME) .
 
+# this will check the container status
+# informs the user about the container's state
+# and prevents the start target from running
+# if the container is not in a stopped state
+status:
+	@echo "${YELLOW}Checking the status of $(DOCKER_CONTAINER_NAME)...${NC}"
+	@STATUS=$$(docker container inspect -f '{{.State.Status}}' $(DOCKER_CONTAINER_NAME) 2>/dev/null); \
+    if [ "$$STATUS" = "running" ]; then \
+        echo "${GREEN}$(DOCKER_CONTAINER_NAME) is already running.${NC}"; \
+        exit 1; \
+    elif [ "$$STATUS" = "exited" ]; then \
+        echo "${YELLOW}$(DOCKER_CONTAINER_NAME) is stopped. Ready to start...${NC}"; \
+    elif [ "$$STATUS" = "paused" ]; then \
+        echo "${YELLOW}$(DOCKER_CONTAINER_NAME) is paused. You might want to unpause or stop it before proceeding.${NC}"; \
+        exit 1; \
+    else \
+        echo "${RED}$(DOCKER_CONTAINER_NAME) does not exist or is in an unknown state.${NC}"; \
+        exit 1; \
+    fi
+
+
+# Start an existing, stopped container with logs
+start: status
+	@echo "${GREEN}Starting the existing Docker container...${NC}"
+	$(call log_and_run, docker start $(DOCKER_CONTAINER_NAME))
+
 # Run the Docker container in the background "-d" -detached
 #  with the current directory mounted to the container directory
+# set volume to persist sql data by mounting volume to appropriate
+# directory inside the container
 run:
-	@echo "${GREEN}Running the Docker container in the background...${NC}"
-	docker run -d --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} ${DOCKER_IMAGE_NAME}
-
-# Run the Docker container in interactive mode with a bash shell
-# This is useful for debugging and running commands inside the container
-run-interactive:
-	@echo "${GREEN}Running the Docker container interactively...${NC}"
-	@echo "${YELLOW}Type 'exit' to stop the container and return to the host shell.${NC}"
-	docker run -it --name $(DOCKER_CONTAINER_NAME) -v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} $(DOCKER_IMAGE_NAME) /bin/bash
+	@echo "${GREEN}Running the Docker container in the background Mode or interactive Mode...${NC}"
+	@echo "${YELLOW}If interactive Type 'exit' to stop the container and return to the host shell.${NC}"
+	docker run -d --name $(DOCKER_CONTAINER_NAME) \
+	-v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} \
+	-v ${MYSQL_VOLUME_NAME}:/var/lib/mysql \
+	${DOCKER_IMAGE_NAME}
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
 # Example: make exec-cmd CMD="ls -l" - will execute "ls -l" inside the container
+# setting bash as default for running make exec-cmd
 CMD ?= "bash"
 
-exec-cmd:
-	@echo "${YELLOW}Executing a bash shell inside the Docker container...$(NC)"
+exec:
+	@echo "${YELLOW}Executing a bash CMD or entering shell inside the Docker container...$(NC)"
 	docker exec -it $(DOCKER_CONTAINER_NAME) /bin/bash -c $(CMD)
 
 # Stop running Docker container and remove it
-# This frees up resources
+# This frees up resources - with logs
 stop:
-	@echo "${RED}Stopping and removing the Docker container...${NC}"
-	docker stop $(DOCKER_CONTAINER_NAME)
-	docker rm $(DOCKER_CONTAINER_NAME)
+	@echo "${RED}Stopping the Docker container...${NC}"
+	$(call log_and_run, docker stop $(DOCKER_CONTAINER_NAME))
 
 # Clean up Docker container and image
 # This is useful for removing all traces of the Docker container
-# and image from the system
+# and image from the system - with logs
 clean:
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Starting clean target" | tee -a make.log
 	@echo "${RED}Cleaning up the Docker container and image...${NC}"
+	@docker stop $(DOCKER_CONTAINER_NAME) || true
+	@docker rm $(DOCKER_CONTAINER_NAME) || true
+	@docker rmi $(DOCKER_IMAGE_NAME) || true
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Finished clean target" | tee -a make.log
+
+# Clean up Docker container and image
+# This is useful for removing all traces of the Docker container
+# and image from the system as well as any volumes stored - with logs
+deep-clean:
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Starting deep-clean target" | tee -a make.log
+	@echo "${RED}Cleaning up the Docker container, image, and volume...${NC}"
 	docker stop $(DOCKER_CONTAINER_NAME) || true
 	docker rm $(DOCKER_CONTAINER_NAME) || true
 	docker rmi $(DOCKER_IMAGE_NAME) || true
+	docker volume rm $(MYSQL_VOLUME_NAME) || true
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Finished deep-clean target" | tee -a make.log
