@@ -62,6 +62,7 @@ status:
 start: status
 	@echo "${GREEN}Starting the existing Docker container...${NC}"
 	$(call log_and_run, docker start $(DOCKER_CONTAINER_NAME))
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Your container was restarted successfully!" | tee -a make.log
 
 # Run the Docker container in the background "-d" -detached
 #  with the current directory mounted to the container directory
@@ -74,6 +75,7 @@ run:
 	-v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} \
 	-v ${MYSQL_VOLUME_NAME}:/var/lib/mysql \
 	${DOCKER_IMAGE_NAME}
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Hurray!!! YOur container is up and Running!" | tee -a make.log
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
@@ -84,12 +86,14 @@ CMD ?= "bash"
 exec:
 	@echo "${YELLOW}Executing a bash CMD or entering shell inside the Docker container...$(NC)"
 	docker exec -it $(DOCKER_CONTAINER_NAME) /bin/bash -c $(CMD)
+	
 
 # Stop running Docker container and remove it
 # This frees up resources - with logs
 stop:
 	@echo "${RED}Stopping the Docker container...${NC}"
 	$(call log_and_run, docker stop $(DOCKER_CONTAINER_NAME))
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - You have successfully stopped your container." | tee -a make.log
 
 # Clean up Docker container and image
 # This is useful for removing all traces of the Docker container

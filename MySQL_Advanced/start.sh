@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# Start Container and Echo Message to Console
-echo "MySQL_Advanced Docker container started successfully ..."
+DIR=mysql_advanced
+
+# Enable force color prompt
+echo "force_color_prompt=yes" >> ~/.bashrc
+
+# Automatically change to the desired directory
+echo "cd /$DIR" >> ~/.bashrc
+
+# Apply changes without needing to re-login
+source ~/.bashrc
 
 # Check if the command argument is provided
 if [ -z "$1" ]; then
