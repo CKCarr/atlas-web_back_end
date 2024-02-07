@@ -14,3 +14,7 @@ venv_name/
 
 # Makefile
 make.log
+
+# file to big for github
+MySQL_Advanced/names.sql
+MySQL_Advanced/metal_bands.sql
