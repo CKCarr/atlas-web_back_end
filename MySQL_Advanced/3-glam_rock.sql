@@ -14,5 +14,5 @@ SELECT band_name,
         ELSE split - formed
     END AS lifespan
 FROM metal_bands
-WHERE style LIKE '%Glam rock'
-ORDER BY lifespan DESC;
+WHERE style LIKE '%Glam rock%'
+ORDER BY lifespan DESC, band_name;
