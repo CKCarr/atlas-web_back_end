@@ -25,11 +25,10 @@ NC=\033[0m # No Color
 # Docker image variables for container names and directories
 # The HOST_DIRECTORY is the current directory
 # the CONTAINER_DIRECTORY is the directory inside the Docker container
-DOCKER_IMAGE_NAME = mysql_advanced
-DOCKER_CONTAINER_NAME = mysql_advanced_container
+DOCKER_IMAGE_NAME = redis_basic
+DOCKER_CONTAINER_NAME = redis_basic_container
 HOST_DIRECTORY=./
-CONTAINER_DIRECTORY=/mysql_advanced
-MYSQL_VOLUME_NAME = mysql_data_volume
+CONTAINER_DIRECTORY=/0x0B_redis_basic
 .PHONY: build status start run exec stop clean deep-clean
 
 # Build the Docker image in the current directory
@@ -109,5 +108,5 @@ deep-clean:
 	docker stop $(DOCKER_CONTAINER_NAME) || true
 	docker rm $(DOCKER_CONTAINER_NAME) || true
 	docker rmi $(DOCKER_IMAGE_NAME) || true
-	docker volume rm $(MYSQL_VOLUME_NAME) || true
+# docker volume rm $() || true
 	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Finished deep-clean target" | tee -a make.log
