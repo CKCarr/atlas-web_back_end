@@ -6,16 +6,23 @@
 -- Context: Updating multiple tables for one action from your application
 -- can generate issue: network disconnection, crash, etc… 
 -- to keep your data in a good shape, let MySQL do it for you!
-DELIMITER //
 
-CREATE TRIGGER decrease_quantity_after_order
-AFTER INSERT ON orders
-FOR EACH ROW
+DELIMITER $$
+
+CREATE PROCEDURE ComputeAverageScoreForUser(IN user_id INT)
 BEGIN
-    UPDATE items
-    SET quantity = quantity - NEW.number
-    WHERE name = NEW.item_name;
-END;
-//
+    -- Temporary variable to hold the average score
+    DECLARE avgScore FLOAT;
+    
+    -- Calculate the average score
+    SELECT AVG(score) INTO avgScore
+    FROM corrections
+    WHERE user_id = user_id;
+    
+    -- Update the average score in the users table
+    UPDATE users
+    SET average_score = avgScore
+    WHERE id = user_id;
+END$$
 
 DELIMITER ;
