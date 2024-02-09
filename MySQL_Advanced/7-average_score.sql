@@ -11,18 +11,9 @@ DELIMITER $$
 
 CREATE PROCEDURE ComputeAverageScoreForUser(IN user_id INT)
 BEGIN
-    -- Temporary variable to hold the average score
     DECLARE avgScore FLOAT;
-    
-    -- Calculate the average score
-    SELECT AVG(score) INTO avgScore
-    FROM corrections
-    WHERE user_id = user_id;
-    
-    -- Update the average score in the users table
-    UPDATE users
-    SET average_score = avgScore
-    WHERE id = user_id;
+    SET avgScore = (SELECT AVG(score) INTO avgScore FROM corrections WHERE user_id = user_id;)
+    UPDATE users SET average_score = avgScore WHERE id = user_id;
 END$$
 
 DELIMITER ;
