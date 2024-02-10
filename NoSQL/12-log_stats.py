@@ -16,9 +16,9 @@ You can use this dump as data sample: dump.zip
 The output of your script must be exactly the same as the example
 """
 
-from pymongo import MongoClient # type: ignore
+from pymongo import MongoClient
 
-def log_stats() -> None:
+def log_stats():
     """Provides stats about Nginx logs stored in MongoDB.
     The output of your script must be exactly the same as the example
     """

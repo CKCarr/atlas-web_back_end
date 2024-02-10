@@ -7,11 +7,7 @@ mongo_collection will be the pymongo collection object
 topic (string) will be topic searched
 """
 
-from typing import List
-from pymongo.collection import Collection # type: ignore
-
-
-def schools_by_topic(mongo_collection: Collection, topic: str) -> List[dict]:
+def schools_by_topic(mongo_collection, topic):
     """
     Returns a list of schools from the collection that have a specific topic.
 
