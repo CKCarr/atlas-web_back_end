@@ -8,5 +8,4 @@ requests
 beautifulsoup4
 bcrypt
 parameterized
-bs4
-pymongo=3.10
+pymongo==3.10

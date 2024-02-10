@@ -7,6 +7,13 @@ Return an empty list if no document in the collection
 mongo_collection will be the pymongo collection object
 """
 from typing import List
+from pymongo.collection import Collection
 
-def list_all(mongo_collection: object) -> list:
-    """  list all documents in a collection """
+def list_all(mongo_collection: Collection) -> List:
+    """  list all documents in a collection
+    args: mongo_collection: pymongo collection object
+    """
+    documents = []
+    for doc in mongo_collection.find():
+        documents.append(doc)
+    return documents

@@ -33,6 +33,11 @@ RUN cd /usr/src && \
     ./configure && \
     make altinstall
 
+# Create a symbolic link for Python 3.7 to be recognized as 'python3'
+# This is the new line added to ensure 'python3' command is available
+RUN ln -s /usr/local/bin/python3.7 /usr/bin/python3 && \
+    python3 --version # Verify Python installation
+
 # Update pip and install Python packages from requirements.txt
 COPY requirements.txt /tmp/requirements.txt
 RUN ln -s /usr/local/bin/pip3.7 /usr/bin/pip && \
