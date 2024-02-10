@@ -10,7 +10,7 @@ topics (list of strings) will be the list of topics approached in the school
 """
 
 from typing import List
-from pymongo.collection import Collection
+from pymongo.collection import Collection # type: ignore
 
 
 def update_topics(mongo_collection: Collection, name: str, topics: List[str]) -> None:

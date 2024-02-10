@@ -8,7 +8,7 @@ topic (string) will be topic searched
 """
 
 from typing import List
-from pymongo.collection import Collection
+from pymongo.collection import Collection # type: ignore
 
 
 def schools_by_topic(mongo_collection: Collection, topic: str) -> List[dict]:
