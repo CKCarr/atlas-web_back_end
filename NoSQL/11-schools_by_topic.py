@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ 11. Where can I learn Python?
 Write a Python function that returns the list of school having a specific topic:
 
