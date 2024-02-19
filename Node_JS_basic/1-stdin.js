@@ -29,5 +29,5 @@ process.stdin.on('data', (data) => {
 
 // Listen for the 'exit' event to display a closing message
 process.on('exit', () => {
-  console.log('This important software is now closing\n');
+    console.log('This important software is now closing\n');
 });
