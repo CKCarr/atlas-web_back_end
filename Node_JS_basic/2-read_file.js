@@ -14,7 +14,6 @@ CSV file can contain empty lines (at the end)
 - and they are not a valid student
 */
 const fs = require('fs');
-const path = require('path');
 
 function countStudents(filePath) {
   try {
@@ -27,16 +26,16 @@ function countStudents(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
 
     // Split data into lines & filter out empty lines
-    const lines = data.split('\n').filter(line => line.trim());
+    const lines = data.split('\n').filter((line) => line.trim());
 
     // Remove the header line
     lines.shift();
 
     // Process the data
-    const studentData = lines.map(line => line.split(',')); // Assuming CSV format is id,firstname,lastname,age,field
+    const studentData = lines.map((line) => line.split(',')); // Assuming CSV format is id,firstname,lastname,age,field
     const fields = {};
 
-    studentData.forEach(student => {
+    studentData.forEach((student) => {
       const field = student[4];
       if (field) { // Ensure there is a field value
         if (!fields[field]) {
@@ -50,10 +49,9 @@ function countStudents(filePath) {
     console.log(`Number of students: ${studentData.length}`);
 
     // Log number of students and list by field
-    Object.keys(fields).forEach(field => {
+    Object.keys(fields).forEach((field) => {
       console.log(`Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`);
     });
-
   } catch (error) {
     throw new Error('Cannot load the database');
   }
