@@ -4,7 +4,7 @@ DIR=node_js_basic
 
 # Automatically change to the desired directory
 echo "cd /$DIR" >> ~/.bashrc
-
+echo "force_color_prompt=yes" >> ~/.bashrc
 # Apply changes without needing to re-login
 source ~/.bashrc
 

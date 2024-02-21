@@ -17,6 +17,8 @@ Your code will be tested through a child process,
 make sure you have everything you need for that
  */
 // Display the welcome message
+
+// Display the welcome message
 process.stdout.write('Welcome to Holberton School, what is your name?\n');
 // listen for data from standard input
 process.stdin.on('data', (data) => {

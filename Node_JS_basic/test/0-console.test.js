@@ -8,7 +8,7 @@ const displayMessage = require('../0-console');
 
 
 // Mock console.log to test it's call
-console.log = jest.fn();
+
 
 describe('displayMessage', () => {
     if('prints the correct message', () => {
