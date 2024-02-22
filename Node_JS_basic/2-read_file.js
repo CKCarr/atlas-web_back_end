@@ -37,7 +37,7 @@ function countStudents(filePath) {
 
     studentData.forEach((student) => {
       const field = student[4];
-      if (field) { // Ensure there is a field value
+      if (field) {
         if (!fields[field]) {
           fields[field] = [];
         }
