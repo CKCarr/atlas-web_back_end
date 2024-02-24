@@ -6,22 +6,29 @@ When the file is not accessible, it should reject the promise with the error
 When the file can be read,
  it should return an object of arrays of the firstname of students per fields */
 
-const fs = require('fs').promises;
+const fs = require('fs')
 
-export const readDatabase = async (filePath) => {
-  try {
-    const data = await fs.readFile(filePath,'utf8');
-    const lines = data.split('\n').slice(1).filter((line) => line.trim());
-    const studentsByField = lines.reduce((acc, line) => {
-      const [firstname, , , field] = line.split(',');
-      acc[field] = acc[field] || [];
-      acc[field].push(firstname);
-      return acc;
-    }, {});
-    return studentsByField;
-  } catch (error) {
-    throw new Error('Cannot load the database');
-  }
-};
-
-export default readDatabase;
+const readDatabase = (filePath) => {
+    return new Promise((resolve, reject) => {
+      fs.promises.readFile(filePath, 'utf8')
+        .then((fileData) => {
+          const lines = fileData.trim().split('\n');
+          const fields = {};
+  
+          for (const line of lines) {
+            const [firstName, , , field] = line.split(',');
+            if (!firstName || !field) continue;
+  
+            if (!fields[field]) {
+              fields[field] = [];
+            }
+            fields[field].push(firstName);
+          }
+  
+          resolve(fields);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
