@@ -7,21 +7,18 @@ It should be assigned to the variable app and this one must be exported
 HTTP server should listen on port 1245
 Displays Hello Holberton School! in the page body for the endpoint / */
 
-// import express module
 const express = require('express');
 
-// create an express application
 const app = express();
+const port = 1245;
 
-// Define a route for the route url
-app.get('/', (req, res) => {
-  res.send('Hello Holberton School!');
+app.get('/', (request, response) => response.send('Hello Holberton School!'));
+
+app.listen(port, (error) => {
+  if (error) {
+    console.log('Something went wrong', error);
+  } else {
+    console.log(`Server is listening on port ${port}`);
+  }
 });
-
-// make the server listen on port 1245
-app.listen(1245, () => {
-  console.log('Server is running on http://localhost:1245');
-});
-
-// export the app
-module.export = app;
+module.exports = app; // Export the app variable
