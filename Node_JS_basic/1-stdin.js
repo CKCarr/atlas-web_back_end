@@ -17,19 +17,17 @@ Your code will be tested through a child process,
 make sure you have everything you need for that
  */
 // Display the welcome message
-
-// Display the welcome message
-process.stdout.write('Welcome to Holberton School, what is your name?\n');
+process.stdout.write('Welcome to Holberton School, what is your name?');
 // listen for data from standard input
-process.stdin.on('data', (data) => {
-  // data is a buffer object that needs to be converted to string
-  const name = data.toString().trim();
-  process.stdout.write(`Your name is: ${name}\n`);
-  // after the user input, the process should exit
-  process.exit();
+process.stdin.on('data', () => {
+  // find name and read and write
+  const name = process.stdin.read();
+  if (name !== null) {
+    process.stdout.write(`Your name is: ${name}`);
+  }
 });
 
 // Listen for the 'exit' event to display a closing message
-process.on('exit', () => {
-  console.log('This important software is now closing');
+process.stdin.on('end', () => {
+  process.stdout.write('This important software is now closing\n');
 });

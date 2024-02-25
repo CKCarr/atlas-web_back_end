@@ -16,64 +16,25 @@ When the URL path is /students,
 CSV file can contain empty lines (at the end) -
  and they are not a valid student! */
 
-// Import required modules
 const express = require('express');
-const fs = require('fs').promises;
+const countStudents = require('./3-read_file_async');
 
-// Create an Express application
 const app = express();
+const port = 1245;
 
-// The database file path is passed as an argument
-const databasePath = process.argv[2];
+app.get('/', (req, res) => res.send('Hello Holberton School!'));
 
-// Async function to count students from the CSV
-async function countStudents(path) {
+app.get('/students', async (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' });
+  const output = 'This is the list of our students\n';
   try {
-    const data = await fs.readFile(path, { encoding: 'utf8' });
-    const lines = data.split('\n').slice(1).filter((line) => line.trim());
-    const countByField = {};
-
-    lines.forEach((line) => {
-      const [firstname, , , field] = line.split(',');
-      if (!countByField[field]) {
-        countByField[field] = { count: 0, firstnames: [] };
-      }
-      countByField[field].count += 1;
-      countByField[field].firstnames.push(firstname);
-    });
-
-    let responseText = `Number of students: ${lines.length}\n`;
-    Object.entries(countByField).forEach(([field, info]) => {
-      responseText += `Number of students in ${field}: ${info.count}. List: ${info.firstnames.join(', ')}\n`;
-    });
-
-    return responseText.trim();
+    const students = await countStudents(process.argv[2]);
+    response.end(`This is the list of our students\n${students.join('\n')}`);
   } catch (error) {
-    throw new Error('Cannot load the database');
-  }
-}
-
-// Define a route for the root URL '/'
-app.get('/', (req, res) => {
-  res.type('text/plain');
-  res.send('Hello Holberton School!');
-});
-
-// Define a route for '/students'
-app.get('/students', async (req, res) => {
-  try {
-    res.type('text/plain');
-    const studentInfo = await countStudents(databasePath);
-    res.send(`This is the list of our students\n${studentInfo}`);
-  } catch (error) {
-    res.status(500).send(error.message);
+    response.end(output + error.message);
   }
 });
 
-// Make the server listen on port 1245
-app.listen(1245, () => {
-  console.log('Server is running on http://localhost:1245');
-});
+app.listen(port);
 
-// Export the app
 module.exports = app;
