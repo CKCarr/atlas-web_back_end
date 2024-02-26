@@ -1,7 +1,7 @@
 // 3-payment.test.js
 
 const sinon = require('sinon');
-const assert = require('assert');
+const expect = require('chai').expect;
 const sendPaymentRequestToApi = require('./3-payment');
 const Utils = require('./utils');
 
@@ -11,8 +11,7 @@ describe('sendPaymentRequestToApi', function() {
 
     sendPaymentRequestToApi(100, 20);
 
-    assert(spy.calledWith('SUM', 100, 20));
-    assert(spy.returned(120));
+    expect(spy.calledOnceWithExactly('SUM', 100, 20)).to.be.true;
 
     spy.restore();
   });

@@ -1,5 +1,4 @@
 /* file named 0-calcul.js:
-
 Create a function named calculateNumber.
 It should accepts two arguments (number) a and b
 The function should round a and b and return the sum of it */

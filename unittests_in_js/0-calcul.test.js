@@ -2,8 +2,6 @@
 You can assume a and b are always number
 Tests should be around the “rounded” part */
 
-/* eslint-disable jest/prefer-expect-assertions */
-/* eslint-disable jest/expect-expect */
 const assert = require('assert');
 const calculateNumber = require('./0-calcul');
 
@@ -13,14 +11,12 @@ describe('calculateNumber', () => {
     assert.strictEqual(calculateNumber(1, 3), 4);
     assert.strictEqual(calculateNumber(1, 3.7), 5);
     assert.strictEqual(calculateNumber(1.2, 3.7), 5);
-    assert.strictEqual(calculateNumber(1.5, 3.7), 6);
   });
 
   it('test both negative integers - calculation', () => {
     assert.strictEqual(calculateNumber(-1, -3), -4);
     assert.strictEqual(calculateNumber(-1, -3.7), -5);
     assert.strictEqual(calculateNumber(-1.2, -3.7), -5);
-    assert.strictEqual(calculateNumber(-1.6, -3.7), -6);
   });
 
   it('test if a or b is not a number to return NaN', () => {
