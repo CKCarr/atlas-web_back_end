@@ -7,11 +7,15 @@ RUN apt-get update && apt-get install -y \
     vim \
     emacs \
     locales \
-    build-essential
+    build-essential \
+    gcc
+# Set locale
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+
+# Setup Node
 RUN curl -sl https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt-get update && apt-get install -y nodejs
