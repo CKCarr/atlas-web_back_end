@@ -85,3 +85,34 @@ describe('/login endpoint', () => {
       });
   });
 });
+
+describe('GET /available_payments', () => {
+  it('should return all available payment methods', (done) => {
+    chai.request(app)
+      .get('/available_payments')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.deep.equal({
+          payment_methods: {
+            credit_cards: true,
+            paypal: false
+          }
+        });
+        done();
+      });
+  });
+});
+
+describe('POST /login', () => {
+  it('should welcome the user', (done) => {
+    chai.request(app)
+      .post('/login')
+      .send({ userName: "Betty" })
+      .set('Content-Type', 'application/json')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.text).to.equal('Welcome Betty');
+        done();
+      });
+  });
+});
