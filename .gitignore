@@ -1,6 +1,9 @@
 # Docker
 .env
 
+# package lockfile
+package-lock.json
+
 # Node
 node_modules/
 
