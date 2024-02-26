@@ -28,7 +28,7 @@ app.use(express.json())
 
 // New /login endpoint
 app.post('/login', (req, res) => {
-  const userName = req.body.userName;
+  const { userName } = req.body;
   res.send(`Welcome ${userName}`);
 });
 
