@@ -23,6 +23,9 @@ app.get('/available_payments', (req, res) => {
   });
 });
 
+// express
+app.use(express.json())
+
 // New /login endpoint
 app.post('/login', (req, res) => {
   const userName = req.body.userName;
