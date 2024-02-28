@@ -1,13 +1,19 @@
-import { createClient } from 'redis';
+// Import the redis client using ES6 syntax
+import redis from 'redis';
 
-const client = createClient({
+// Create a client instance
+const client = redis.createClient({
   host: 'localhost',
+  port: 6379
 });
 
-client.on('connect', () => {
-  console.log('Redis client connected to the server');
+// Listen for the "connect" event to log the successful connection
+client.on('connect', function() {
+    console.log('Redis client connected to the server');
 });
 
-client.on('error', (err) => {
-  console.log(`Redis client not connected to the server: ${err}`);
+// Listen for the "error" event to log any errors
+client.on('error', function(error) {
+    console.log(`Redis client not connected to the server: ${error.message}`);
 });
+

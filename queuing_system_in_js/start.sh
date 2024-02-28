@@ -1,14 +1,13 @@
 #!/bin/bash
 
-DIR=unittests_in_js
-
-# Start Redis server
-service redis-server start | echo "Redis server started successfully ..."
+DIR=queuing_system_in_js
 
 # Automatically change to the desired directory
 echo "cd /$DIR" >> ~/.bashrc
-# Enable color prompt
-echo "force_color_prompt=yes" >> ~/.bashrc
+
+# Set a colorful PS1 prompt directly in your Dockerfile or startup script
+echo 'export PS1="\[\e[92m\]\u@\h:\[\e[36m\]\w\[\e[00m\]\$ "' >> ~/.bashrc
+
 # Apply changes without needing to re-login
 source ~/.bashrc
 

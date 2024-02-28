@@ -1,37 +1,47 @@
 FROM ubuntu:18.04
 
-RUN apt-get update
-RUN apt-get -y upgrade
-# curl/wget/git
-RUN apt-get install -y curl wget git tar
-# vim/emacs
-RUN apt-get install -y vim emacs
+RUN apt-get update && apt-get -y upgrade
+
+# Install essential packages
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    vim \
+    emacs \
+    locales \
+    build-essential \
+    gcc
 
 # Set locale
-RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
+
+# Set environment variables for the locale
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Setup Node
-RUN curl -sl https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh \
-    && bash nodesource_setup.sh \
-    && apt-get update && apt-get install -y nodejs \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Setup Node.js
+RUN curl -sl https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt-get update && apt-get install -y nodejs
 
-# Install redis server and the redis client
-# Install Redis
-RUN apt-get update && apt-get install -y redis-server && \
-    sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
+# Install Redis server and client
+RUN apt-get -y install redis-server
+RUN sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
 
-COPY package.json ./
-RUN npm install
+# Install project dependencies
+RUN mkdir /tmp/node_packages
+COPY package.json /tmp/node_packages/package.json
+RUN cd /tmp/node_packages && npm install
 
-# Create test user
-RUN useradd -M correction_tester
+# Create and switch to a non-root user
+RUN useradd -m correction_tester
 
-# Copy the start script
+# Expose ports
+EXPOSE 3000 6379
+
+# Make the start script executable
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 ENTRYPOINT ["/start.sh"]
