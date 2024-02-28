@@ -2,9 +2,8 @@
 You can assume a and b are always number
 Tests should be around the “rounded” part */
 
-
 const expect = require('chai').expect;
-const calculateNumber = require('./1-calcul');
+const calculateNumber = require('./2-calcul_chai');
 
 describe('calculateNumber', () => {
 
