@@ -4,7 +4,7 @@ class Utils {
     static calculateNumber(type, a, b) {
       const roundedA = Math.round(a);
       const roundedB = Math.round(b);
-  
+
       switch (type) {
         case 'SUM':
           return roundedA + roundedB;
@@ -18,5 +18,5 @@ class Utils {
       }
     }
   }
-  
-  module.exports = Utils;
+
+module.exports = Utils;

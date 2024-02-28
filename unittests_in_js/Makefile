@@ -30,7 +30,7 @@ DOCKER_CONTAINER_NAME = unittests_in_js_container
 HOST_DIRECTORY=./
 CONTAINER_DIRECTORY=/unittests_in_js
 VOLUME_NAME = unittests_in_js_volume
-.PHONY: build status start run exec stop clean deep-clean
+.PHONY: build status start create-volume inspect-volume run exec stop clean deep-clean
 
 # Build the Docker image in the current directory
 build:
@@ -57,27 +57,39 @@ status:
         exit 1; \
     fi
 
-
 # Start an existing, stopped container with logs
 start: status
 	@echo "${GREEN}Starting the existing Docker container...${NC}"
 	$(call log_and_run, docker start $(DOCKER_CONTAINER_NAME))
 	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Your container was restarted successfully!" | tee -a make.log
 
+# Create the container volume for persistent storage
+create-volume:
+	@echo "${GREEN}Creating Docker volume for ${VOLUME_NAME} container data...${NC}"
+	docker volume create $(VOLUME_NAME)
+	@echo "${YELLOW}Docker Volume created - Storage persists${NC}"
+
+# target to inspect volume for debugging
+# understand where Docker is storing the volume data on the host system
+inspect-volume:
+	@echo "${GREEN}Inspecting volume ${VOLUME_NAME}...${NC}"
+	docker volume inspect $(VOLUME_NAME)
+
 # Run the Docker container in the background "-d" -detached
-#  with the current directory mounted to the container directory
+# with the current directory mounted to the container directory
 # set volume to persist sql data by mounting volume to appropriate
 # directory inside the container
-run:
+run: build
 	@echo "${GREEN}Running the Docker container in the background Mode or interactive Mode...${NC}"
 	@echo "${YELLOW}If interactive Type 'exit' to stop the container and return to the host shell.${NC}"
-	docker run -d --name unittests_in_js_container \
-	-v $(PWD):/unittests_in_js \
-	-p 6379:6379 \
-	-p 3000:3000 \
-	unittests_in_js
-	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Hurray!!! Your container is up and Running!" | tee -a make.log
 
+	docker run -d --name $(DOCKER_CONTAINER_NAME) \
+	-v ${HOST_DIRECTORY}:${CONTAINER_DIRECTORY} \
+	-p 3000:3000 \
+	-p 6379:6379 \
+	$(DOCKER_IMAGE_NAME)
+
+	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Hurray!!! Your container is up and Running!" | tee -a make.log
 
 # Execute a bash shell in the Docker container for debugging purposes
 # allows for running commands inside the container
@@ -110,6 +122,7 @@ clean:
 # Clean up Docker container and image
 # This is useful for removing all traces of the Docker container
 # and image from the system as well as any volumes stored - with logs
+# !! CAUTION !! THIS WILL REMOVE AND PERSISTANT STORAGE !!
 deep-clean:
 	@echo "`date +'%Y-%m-%d %H:%M:%S'` - Starting deep-clean target" | tee -a make.log
 	@echo "${RED}Cleaning up the Docker container, image, and volume...${NC}"

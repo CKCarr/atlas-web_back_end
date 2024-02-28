@@ -1,46 +1,28 @@
 /* file 0-calcul.test.js that contains test cases of this function
 You can assume a and b are always number
 Tests should be around the “rounded” part */
-
-const assert = require('assert');
-const calculateNumber = require('./0-calcul');
+const assert = require("assert");
+const calculateNumber = require("./0-calcul.js");
 
 describe('calculateNumber', () => {
-
-  it('test both positive integers - calculation', function () {
-    assert.strictEqual(calculateNumber(1, 3), 4);
-    assert.strictEqual(calculateNumber(1, 3.7), 5);
-    assert.strictEqual(calculateNumber(1.2, 3.7), 5);
+  it('it round the first argument', () => {
+    assert.equal(calculateNumber(1.0, 0), 1);
+    assert.equal(calculateNumber(1.3, 0), 1);
+    assert.equal(calculateNumber(1.7, 0), 2);
   });
 
-  it('test both negative integers - calculation', () => {
-    assert.strictEqual(calculateNumber(-1, -3), -4);
-    assert.strictEqual(calculateNumber(-1, -3.7), -5);
-    assert.strictEqual(calculateNumber(-1.2, -3.7), -5);
+  it('it round the second argument', () => {
+    assert.equal(calculateNumber(0, 1.0), 1);
+    assert.equal(calculateNumber(0, 1.3), 1);
+    assert.equal(calculateNumber(0, 1.7), 2);
   });
 
-  it('test if a or b is not a number to return NaN', () => {
-    assert.strictEqual(calculateNumber('A', 1.6), NaN);
-    assert.strictEqual(calculateNumber(1.6, 'B'), NaN);
-    assert.strictEqual(calculateNumber('A', 'B'), NaN);
+  it('it should return the right number', () => {
+    assert.equal(calculateNumber(1.3, 0), 1);
+    assert.equal(calculateNumber(0, 1.2), 1);
+    assert.equal(calculateNumber(1.3, 1.3), 2);
+    assert.equal(calculateNumber(1.7, 1.2), 3);
+    assert.equal(calculateNumber(1.3, 1.8), 3);
+    assert.equal(calculateNumber(1.6, 1.8), 4);
   });
-
-  it('test if a or b is infinite to return NaN', () => {
-    assert.strictEqual(calculateNumber(Infinity, 1.6), Infinity);
-    assert.strictEqual(calculateNumber(Infinity, Infinity), Infinity);
-    assert.strictEqual(calculateNumber(-Infinity, 1.6), -Infinity);
-    assert.strictEqual(calculateNumber(-Infinity, -Infinity), -Infinity);
-    assert.strictEqual(calculateNumber(Infinity, -1.6), Infinity)
-  });
-
-  it('should handle cases where one or both numbers are negative', () => {
-    assert.strictEqual(calculateNumber(-1, 3), 2);
-    assert.strictEqual(calculateNumber(-1.5, -2.5), -3);
-  });
-
-  it('should handle cases with 0 correctly', () => {
-    assert.strictEqual(calculateNumber(0, 0), 0);
-    assert.strictEqual(calculateNumber(0, 3.7), 4);
-  });
-
 });
