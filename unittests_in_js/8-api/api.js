@@ -9,7 +9,7 @@ app.get('/', (request, response) => {
 
 const PORT = 7865;
 app.listen(PORT, ()=> {
-    console.log(`API availabile on localhost port ${PORT}`);
+    console.log(`API available on localhost port ${PORT}`);
 });
 
 module.exports = app;
