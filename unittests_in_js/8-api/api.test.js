@@ -4,7 +4,7 @@ const chai = require('chai');
 const request = require('request');
 const expect = chai.expect;
 
-describe('8-api test suite', function() {
+describe('8-api test suite - Index page', function() {
   // Base URL of the server
   const baseURL = 'http://localhost:7865';
 
