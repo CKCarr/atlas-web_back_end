@@ -1,31 +1,27 @@
 // api.test.js
 
 const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('./api');
-const { expect } = chai;
+const request = require('request');
+const expect = chai.expect;
 
-chai.use(chaiHttp);
+describe('8-api test suite', function() {
+  // Base URL of the server
+  const baseURL = 'http://localhost:7865';
 
-describe('Index page', function() {
-  // Test for the correct status code
+  // Test case for verifying the status code
   it('should return status code 200', function(done) {
-    chai.request(app)
-      .get('/')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done();
-      });
+    request.get(`${baseURL}/`, function(err, res, body) {
+      expect(res.statusCode).to.equal(200);
+      done();
+    });
   });
 
-  // Test for the correct result
+  // Test case for verifying the response body content
   it('should return the correct message', function(done) {
-    chai.request(app)
-      .get('/')
-      .end((err, res) => {
-        expect(res.text).to.equal('Welcome to the payment system');
-        done();
-      });
+    request.get(`${baseURL}/`, function(err, res, body) {
+      expect(body).to.equal('Welcome to the payment system');
+      done();
+    });
   });
-
 });
+
